@@ -28,6 +28,7 @@ public class BranchJDBCDAO implements BranchDAO_interface {
 	// 獲取下一個流水號
 		
 		private String getNextBranch_id() throws SQLException {
+			// 
 		    String nextId = "B001"; // 預設初始值
 		    String pref = "B";  // 改成你的表格的流水號開頭
 
