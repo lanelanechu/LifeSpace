@@ -29,7 +29,7 @@ public class SpaceService {
 		spaceVO.setLatitude(latitude);
 		spaceVO.setLongitude(longitude);
 		dao.insert(spaceVO);
-		System.out.println(a);
+	
 		return spaceVO;
 	}
 	
