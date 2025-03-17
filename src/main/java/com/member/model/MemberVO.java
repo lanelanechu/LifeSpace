@@ -3,8 +3,7 @@ package com.member.model;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public class MemberVO implements java.io.Serializable{
-	
+public class MemberVO implements java.io.Serializable {
 	private String memberId;
 	private String memberName;
 	private byte[] memberImage;
@@ -69,7 +68,6 @@ public class MemberVO implements java.io.Serializable{
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-	
 	
 	
 	
