@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class SpaceJDBCDAO implements SpaceDAO_interface {
 	public static final String DRIVER = "com.mysql.cj.jdbc.Driver";
-	public static final String URL = "jdbc:mysql://localhost:3306/life_space_01?serverTimezone=Asia/Taipei";
+	public static final String URL = "jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Taipei";
 	public static final String USER = "root";
 	public static final String PASSWORD = "123456";
 
@@ -345,7 +345,7 @@ public class SpaceJDBCDAO implements SpaceDAO_interface {
 
 		// 新增
 //		SpaceVO spaceVO1 = new SpaceVO();
-//		spaceVO1.setBranchId("B003");
+//		spaceVO1.setBranchId("B005");
 //		spaceVO1.setSpaceName("Test 101");
 //		spaceVO1.setSpacePeople(4);
 //		spaceVO1.setSpaceSize(10.0);
@@ -361,19 +361,19 @@ public class SpaceJDBCDAO implements SpaceDAO_interface {
 
 		// 修改
 //		SpaceVO spaceVO2 = new SpaceVO();
+//		spaceVO2.setSpaceId("S026");
 //		spaceVO2.setBranchId("B002");
 //		spaceVO2.setSpaceName("Test 101");
 //		spaceVO2.setSpacePeople(4);
 //		spaceVO2.setSpaceSize(10.0);
 //		spaceVO2.setSpaceHourlyFee(200);
 //		spaceVO2.setSpaceDailyFee(1200);
-//		spaceVO2.setSpaceDesc("aklsdfjas;klfjasl;dfj");
+//		spaceVO2.setSpaceDesc("該空間寬敞設計現代，提供全面服務，環境安全舒適。");
 //		spaceVO2.setSpaceAlert(null);
 //		spaceVO2.setSpaceStatus(1);
 //		spaceVO2.setSpaceAddress("台北市中山區中山北路三段57號9樓");
 //		spaceVO2.setLatitude(25.064);
 //		spaceVO2.setLongitude(121.522);
-//		spaceVO2.setSpaceId("S026");
 //		dao.update(spaceVO2);
 
 		// 刪除
@@ -404,28 +404,28 @@ public class SpaceJDBCDAO implements SpaceDAO_interface {
 //		System.out.println("\n---------------------");
 
 		// 查詢
-		List<SpaceVO> list = dao.getAll();
-		for (SpaceVO space : list) {
-			System.out.print(space.getSpaceId() + ",");
-			System.out.print(space.getBranchId() + ",");
-			System.out.print(space.getSpaceName() + ",");
-			System.out.print(space.getSpacePeople() + ",");
-			System.out.print(space.getSpaceSize() + ",");
-			
-			System.out.print(space.getSpaceHourlyFee() + ",");
-			System.out.print(space.getSpaceDailyFee() + ",");
-			System.out.print(space.getSpaceDesc() + ",");
-			System.out.print(space.getSpaceRating() + ",");
-			System.out.print(space.getSpaceAlert() + ",");
-			System.out.print(space.getSpaceUsed24hr() + ",");
-			
-			System.out.print(space.getSpaceUsed7d() + ",");
-			System.out.print(space.getSpaceStatus() + ",");
-			System.out.print(space.getSpaceAddress() + ",");
-			System.out.print(space.getLatitude() + ",");
-			System.out.print(space.getLongitude() + ",");
-			System.out.print(space.getCreatedTime());
-			System.out.println();
-		}
+//		List<SpaceVO> list = dao.getAll();
+//		for (SpaceVO space : list) {
+//			System.out.print(space.getSpaceId() + ",");
+//			System.out.print(space.getBranchId() + ",");
+//			System.out.print(space.getSpaceName() + ",");
+//			System.out.print(space.getSpacePeople() + ",");
+//			System.out.print(space.getSpaceSize() + ",");
+//			
+//			System.out.print(space.getSpaceHourlyFee() + ",");
+//			System.out.print(space.getSpaceDailyFee() + ",");
+//			System.out.print(space.getSpaceDesc() + ",");
+//			System.out.print(space.getSpaceRating() + ",");
+//			System.out.print(space.getSpaceAlert() + ",");
+//			System.out.print(space.getSpaceUsed24hr() + ",");
+//			
+//			System.out.print(space.getSpaceUsed7d() + ",");
+//			System.out.print(space.getSpaceStatus() + ",");
+//			System.out.print(space.getSpaceAddress() + ",");
+//			System.out.print(space.getLatitude() + ",");
+//			System.out.print(space.getLongitude() + ",");
+//			System.out.print(space.getCreatedTime());
+//			System.out.println();
+//		}
 	}
 }
