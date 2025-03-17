@@ -30,7 +30,7 @@ public class FaqService {
         return addFaq(null, adminId, faqAsk, faqAnswer, faqStatus);
     }
     
-    // 修改 FAQ----------------
+    // 修改 FAQ-------------
     public FaqVO updateFaq(String faqId,String faqAsk, String faqAnswer) {
         FaqVO faqVO = new FaqVO();
 
