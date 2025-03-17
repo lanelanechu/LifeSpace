@@ -34,7 +34,6 @@ public class BranchService {
             Integer branchStatus) {
 
         BranchVO branchVO = new BranchVO();
-
         branchVO.setBranchId(branchId);
         branchVO.setBranchName(branchName);
         branchVO.setBranchAddr(branchAddr);
@@ -56,6 +55,7 @@ public class BranchService {
     }
 
     public List<BranchVO> getAll() {
+
         return dao.getAll();
     }
 }
