@@ -10,7 +10,7 @@ public class FaqService {
         dao = new FaqJDBCDAO();
     }
 
-    // 新增 FAQ------------------
+    // 新增 FAQ--------------
     public FaqVO addFaq(String faqId, String adminId, String faqAsk, String faqAnswer, Integer faqStatus) {
         FaqVO faqVO = new FaqVO();
 
