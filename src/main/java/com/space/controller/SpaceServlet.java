@@ -25,6 +25,7 @@ public class SpaceServlet extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		String action = request.getParameter("action");
+		System.out.println(action);
 
 		if (action.equals("getOne_For_Display")) { // 來自space_select_page.jsp的請求
 			List<String> errorMsgs = new LinkedList<String>(); // 用來存所有錯誤資料
