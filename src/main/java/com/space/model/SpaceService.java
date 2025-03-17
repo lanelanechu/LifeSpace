@@ -51,6 +51,7 @@ public class SpaceService {
 		spaceVO.setLatitude(latitude);
 		spaceVO.setLongitude(longitude);
 		dao.update(spaceVO);
+		System.out.println();
 		return spaceVO;
 	}
 	
