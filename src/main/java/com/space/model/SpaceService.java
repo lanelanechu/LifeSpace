@@ -14,7 +14,6 @@ public class SpaceService {
 			Double spaceSize, Integer spaceHourlyFee, Integer spaceDailyFee, String spaceDesc,
 			String spaceAlert, Integer spaceStatus, String spaceAddress,
 			Double latitude, Double longitude) {
-		System.out.println(spaceStatus);
 		SpaceVO spaceVO = new SpaceVO();
 		spaceVO.setBranchId(branchId);
 		spaceVO.setSpaceName(spaceName);
@@ -51,7 +50,6 @@ public class SpaceService {
 		spaceVO.setLatitude(latitude);
 		spaceVO.setLongitude(longitude);
 		dao.update(spaceVO);
-		System.out.println();
 		return spaceVO;
 	}
 	
