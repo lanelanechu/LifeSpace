@@ -55,7 +55,6 @@ public class BranchService {
     }
 
     public List<BranchVO> getAll() {
-
         return dao.getAll();
     }
 }
