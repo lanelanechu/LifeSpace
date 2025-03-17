@@ -377,7 +377,7 @@ public class SpaceServlet extends HttpServlet {
 			/*************************** 2.開始查詢資料 ****************************************/
 			SpaceService spaceSvc = new SpaceService();
 			spaceSvc.deleteSpace(spaceId);
-			
+
 			/*************************** 3.查詢完成,準備轉交(Send the Success view) ************/
 			String url = "/backend/space/listAllSpace.jsp";
 			RequestDispatcher successView = request.getRequestDispatcher(url);
