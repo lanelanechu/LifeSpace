@@ -373,7 +373,7 @@ public class SpaceServlet extends HttpServlet {
 			
 			/*************************** 1.接收請求參數 ****************************************/
 			String spaceId = request.getParameter("spaceId");
-
+			
 			/*************************** 2.開始查詢資料 ****************************************/
 			SpaceService spaceSvc = new SpaceService();
 			spaceSvc.deleteSpace(spaceId);
@@ -382,6 +382,7 @@ public class SpaceServlet extends HttpServlet {
 			String url = "/backend/space/listAllSpace.jsp";
 			RequestDispatcher successView = request.getRequestDispatcher(url);
 			successView.forward(request, response);
+
 		}
 	}
 }
