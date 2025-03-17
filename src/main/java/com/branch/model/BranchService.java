@@ -41,7 +41,7 @@ public class BranchService {
         branchVO.setLatitude(latitude);
         branchVO.setLongitude(longitude);
         branchVO.setBranchStatus(branchStatus);
-
+        
         dao.update(branchVO);
         return branchVO;
     }
