@@ -19,17 +19,17 @@ public class FaqService {
         faqVO.setFaqAsk(faqAsk);
         faqVO.setFaqAnswer(faqAnswer);
         faqVO.setFaqStatus(faqStatus);
-        
+
         dao.insert(faqVO); 
         return faqVO;
     }
-    	
+
     // 新增FAQ overloading(之後如不再自動生成ID可彈性調整)
     public FaqVO addFaq(String adminId, String faqAsk, String faqAnswer, Integer faqStatus) {
         // 自動生成faqId時，null值會被忽略
         return addFaq(null, adminId, faqAsk, faqAnswer, faqStatus);
     }
-    
+
     // 修改 FAQ----------------
     public FaqVO updateFaq(String faqId,String faqAsk, String faqAnswer) {
         FaqVO faqVO = new FaqVO();
