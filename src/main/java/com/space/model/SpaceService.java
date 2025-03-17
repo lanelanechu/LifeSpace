@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SpaceService {
 	private SpaceDAO_interface dao;
-
+	
 	public SpaceService() {
 		dao = new SpaceJDBCDAO();
 	}
