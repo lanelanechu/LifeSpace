@@ -44,7 +44,6 @@ public class BranchService {
         branchVO.setBranchStatus(branchStatus);
         
         dao.update(branchVO);
-        System.out.println();
         return branchVO;
     }
 
