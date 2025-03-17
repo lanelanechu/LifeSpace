@@ -5,7 +5,7 @@ import java.util.List;
 
 public class SpaceService {
 	private SpaceDAO_interface dao;
-	
+
 	public SpaceService() {
 		dao = new SpaceJDBCDAO();
 	}
@@ -29,7 +29,6 @@ public class SpaceService {
 		spaceVO.setLatitude(latitude);
 		spaceVO.setLongitude(longitude);
 		dao.insert(spaceVO);
-	
 		return spaceVO;
 	}
 	
@@ -52,7 +51,7 @@ public class SpaceService {
 		spaceVO.setLatitude(latitude);
 		spaceVO.setLongitude(longitude);
 		dao.update(spaceVO);
-	
+		System.out.println();
 		return spaceVO;
 	}
 	
