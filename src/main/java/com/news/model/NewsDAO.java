@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 
 public class NewsDAO implements NewsDAO_interface {
 
-	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可
+	// 一個應用程式中,針對一個資料庫 ,共用一個DataSource即可...
 	private static DataSource ds = null;
 	static {
 		try {
