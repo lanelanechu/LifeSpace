@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="java.util.*"%>
 <%@ page import="com.space.model.*"%>
 <%-- 此頁練習採用 EL 的寫法取值 --%>
@@ -252,7 +253,7 @@ tr:hover {
 						<td>${spaceVO.spaceAddress}</td>
 						<td>${spaceVO.latitude}</td>
 						<td>${spaceVO.longitude}</td>
-						<td>${spaceVO.createdTime}</td>
+						<td><fmt:formatDate value="${spaceVO.createdTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 
 						<td>
 							<FORM METHOD="post"
@@ -263,12 +264,12 @@ tr:hover {
 							</FORM>
 						</td>
 						<td>
-<%-- 							<FORM METHOD="post"
+							<FORM METHOD="post"
 								ACTION="<%=request.getContextPath()%>/backend/space/space.do">
 								<input class="btn btn-delete" type="submit" value="刪除"> 
 								<input type="hidden" name="spaceId" value="${spaceVO.spaceId}"> 
 								<input type="hidden" name="action" value="delete">
-							</FORM> --%>
+							</FORM>
 						</td>
 					</tr>
 				</c:forEach>

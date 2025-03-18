@@ -180,3 +180,4 @@ nb-configuration.xml
 
 *.log
 
+src/main/resources/config/api-keys.properties
