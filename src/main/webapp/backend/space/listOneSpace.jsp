@@ -1,5 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.space.model.*"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <%-- 此頁暫練習採用 Script 的寫法取值 --%>
 
 <%
@@ -256,7 +258,7 @@ tr:hover {
 					<td><%=spaceVO.getSpaceAddress()%></td>
 					<td><%=spaceVO.getLatitude()%></td>
 					<td><%=spaceVO.getLongitude()%></td>
-					<td><%=spaceVO.getCreatedTime()%></td>
+					<td><fmt:formatDate value="<%=spaceVO.getCreatedTime()%>" pattern="yyyy-MM-dd HH:mm:ss" /></td>
 					<td>
 						<FORM METHOD="post"
 							ACTION="<%=request.getContextPath()%>/backend/space/space.do">
@@ -265,7 +267,14 @@ tr:hover {
 							<input type="hidden" name="action" value="getOne_For_Update">
 						</FORM>
 					</td>
-					<td></td>
+					<td>
+						<FORM METHOD="post"
+							ACTION="<%=request.getContextPath()%>/backend/space/space.do">
+							<input class="btn btn-delete" type="submit" value="刪除"> 
+							<input type="hidden" name="spaceId" value="${spaceVO.spaceId}"> 
+							<input type="hidden" name="action" value="delete">
+						</FORM>
+					</td>
 				</tr>
 			</tbody>
 		</table>

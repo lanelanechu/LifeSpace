@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="com.space.model.*"%>
+<%@ page import="com.space.util.*"%>
 <%@ page import="java.util.*"%>
 
 
@@ -130,6 +131,7 @@ textarea.form-control {
 	}
 }
 </style>
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= ApiKeyManager.getGoogleMapsApiKey() %>&libraries=places"></script>
 
 </head>
 <body>
@@ -151,10 +153,10 @@ textarea.form-control {
 			name="form1">
 			
 			<div class="form-group">
-                <label for="branchId">所屬分店編號:</label>
-                <select id="branchId" name= "branch_id" class="form-control" size="1">
+                <label for="branchId">所屬分店:</label>
+                <select id="branchId" name= "branchId" class="form-control" size="1">
                 	<c:forEach var="branchVO" items="${branchSvc.all}">
-						<option value="${branchVO.branch_id}" ${(spaceVO.branchId==branchVO.branch_id) ? 'selected':'' } >${branchVO.branch_name}
+						<option value="${branchVO.branchId}" ${(spaceVO.branchId==branchVO.branchId) ? 'selected':'' } >${branchVO.branchName}
 					</c:forEach>
                 </select>
             </div>
@@ -230,4 +232,43 @@ textarea.form-control {
 		</FORM>
 	</div>
 </body>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 獲取相關 DOM 元素
+    const addressInput = document.getElementById('spaceAddress');
+    const latitudeInput = document.getElementById('latitude');
+    const longitudeInput = document.getElementById('longitude');
+    
+    // 初始化地址自動完成
+    const autocomplete = new google.maps.places.Autocomplete(addressInput, {
+        // 限制在台灣範圍內搜尋
+        componentRestrictions: { country: 'tw' }
+    });
+    
+    // 當用戶選擇一個地點時的事件處理
+    autocomplete.addListener('place_changed', function() {
+        const place = autocomplete.getPlace();
+        
+        // 確認選定的地方有經緯度資訊
+        if (!place.geometry || !place.geometry.location) {
+            console.error('沒有找到此地址的地理資訊');
+            return;
+        }
+        
+        // 獲取經緯度並填入表單
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        
+        // 設定精確度為小數點後6位
+        latitudeInput.value = lat.toFixed(6);
+        longitudeInput.value = lng.toFixed(6);
+        
+        // 如果需要，可以更新完整地址
+        addressInput.value = place.formatted_address;
+        
+        console.log('已成功獲取經緯度:', lat, lng);
+    });
+});
+</script>
 </html>
