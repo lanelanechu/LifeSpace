@@ -22,8 +22,8 @@ public class NewsCategoryVO {
 
 	@Id
 	@Column(name = "news_category_id")
-	@GeneratedValue(generator = "news_category_id")
-	@GenericGenerator(name = "news_category_id", strategy = "com.lifespace.util.NewsCategoryCustomStringIdGenerator")
+	//@GeneratedValue(generator = "news_category_id")
+	//@GenericGenerator(name = "news_category_id", strategy = "com.lifespace.util.NewsCategoryCustomStringIdGenerator")
 	private String newsCategoryId;
 	
 	@Column(name = "category_name")

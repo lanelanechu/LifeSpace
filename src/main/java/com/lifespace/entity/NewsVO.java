@@ -20,8 +20,8 @@ public class NewsVO {
 
 	@Id
 	@Column(name = "news_id")
-	@GeneratedValue(generator = "news_id")
-	@GenericGenerator(name = "news_id", strategy = "com.lifespace.util.NewsCustomStringIdGenerator")
+	//@GeneratedValue(generator = "news_id")
+	//@GenericGenerator(name = "news_id", strategy = "com.lifespace.util.NewsCustomStringIdGenerator")
 	private String newsId;
 
 	@Column(name = "news_title")

@@ -2,27 +2,39 @@ package com.lifespace.controller;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lifespace.dto.SpaceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.lifespace.exception.ResourceNotFoundException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lifespace.dto.SpaceCommentResponse;
+import com.lifespace.dto.SpaceRequest;
 import com.lifespace.entity.Space;
+import com.lifespace.exception.ResourceNotFoundException;
 import com.lifespace.service.SpaceService;
 
 import jakarta.validation.Valid;
-import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 
 
 // 直接回傳 JSON，前端可以用 AJAX 調用
@@ -119,5 +131,67 @@ public class SpaceController {
 	}
 
 	// 透過上、下架進行篩選
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//根據空間id查詢評論
+	@GetMapping("/spaces/comments/{spaceId}")
+	public ResponseEntity<Page<SpaceCommentResponse>> getSpaceCommentsById(
+	            @PathVariable String spaceId,
+	            @RequestParam(defaultValue = "0") int page, // 預設為第一頁
+	            @RequestParam(defaultValue = "10") int size  // 預設每頁 10 筆
+	    ) {
+			
+			Space space = spaceService.getSpaceById(spaceId);
+
+			if (space == null) {   // 若這個spaceId沒有資料
+				throw new ResourceNotFoundException("找不到 ID 為「 " + spaceId + " 」的空間");  
+			}
+	        // 建立分頁物件
+	        Pageable pageable = PageRequest.of(page, size);
+
+	        Page<SpaceCommentResponse> commentPage = spaceService.getSpaceCommentsById(spaceId, pageable);
+
+	        return new ResponseEntity<>(commentPage, HttpStatus.OK);
+	    }
+
+	//根據條件查詢空間評論
+	@GetMapping("/spaces/comments")
+	public ResponseEntity<Page<SpaceCommentResponse>> searchSpaceComments( 
+	    		@RequestParam(required = false) String spaceId,
+	            @RequestParam(required = false) String spaceName,
+	            @RequestParam(required = false) String branchId,
+	            @RequestParam(defaultValue = "5") @Max(10) @Min(0) Integer size,
+	            @RequestParam(defaultValue = "0") @Min(0) Integer page) {
+	        // 創建分頁和排序條件
+	        Pageable pageable = PageRequest.of( page, size );
+	        // 處理空字符串
+	        spaceId = (spaceId != null && spaceId.trim().isEmpty()) ? null : spaceId;
+	        spaceName = (spaceName != null && spaceName.trim().isEmpty()) ? null : spaceName;
+	        branchId = (branchId != null && branchId.trim().isEmpty()) ? null : branchId;
+
+	        Page<SpaceCommentResponse> result = spaceService.getSpaceCommentsByConditions(
+	        		spaceId, spaceName, branchId, pageable);
+	        
+	        return ResponseEntity.ok(result);
+	    }
 
 }

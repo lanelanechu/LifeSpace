@@ -7,11 +7,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.lifespace.dto.SpaceCommentResponse;
 import com.lifespace.dto.SpaceEquipmentRequest;
 import com.lifespace.dto.SpaceRequest;
 import com.lifespace.entity.*;
 import com.lifespace.repository.SpaceUsageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lifespace.exception.ResourceNotFoundException;
@@ -180,4 +184,65 @@ public class SpaceService {
 
 		return spaceRepository.save(s);
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//找特定空間id的評論
+	public Page<SpaceCommentResponse> getSpaceCommentsById(String spaceId,Pageable pageable) {
+			
+			// 進行搜尋，不搜尋空間名稱以及分店
+			String spaceName = null;
+	        String branchId = null;
+	        Page<SpaceCommentResponse> commentPage = spaceRepository.findSpaceCommentsByConditions(
+	        		spaceId,
+	                spaceName,
+	                branchId,
+	                pageable
+	        );
+	        
+	        List<SpaceCommentResponse> responseList = commentPage.getContent();
+	        
+	        //回傳response
+	        return new PageImpl<>(responseList, pageable, commentPage.getTotalElements());
+			
+		}
+
+	//依照查詢條件查看空間評論
+	public Page<SpaceCommentResponse> getSpaceCommentsByConditions( 
+				String spaceId,
+	            String spaceName,
+	            String branchId,
+	            Pageable pageable) {
+			
+			// 進行搜尋
+	        Page<SpaceCommentResponse> commentPage = spaceRepository.findSpaceCommentsByConditions(
+	        		spaceId,
+	                spaceName,
+	                branchId,
+	                pageable
+	        );
+	        
+	        List<SpaceCommentResponse> responseList = commentPage.getContent();
+	        
+	        //回傳response
+	        return new PageImpl<>(responseList, pageable, commentPage.getTotalElements());
+			
+			}
 }

@@ -54,7 +54,7 @@ public class EventService {
     EventPhotoRepository eventPhotoRepository; // 注入 EventPhotoRepository
 	
 	//新增活動
-	@Transactional
+	//@Transactional，加了會報錯，待解決
 	public void addEvent(EventRequest eventRequest, List<MultipartFile> photos) {
 		
 		Timestamp currentTime = new Timestamp(System.currentTimeMillis());
@@ -92,6 +92,8 @@ public class EventService {
                     // 處理檔案儲存失敗的例外
                     e.printStackTrace();
                     // 可以選擇拋出例外或記錄錯誤
+                 // 重新拋出異常
+                    throw new RuntimeException("儲存照片失敗", e);
                 }
             }
         }
