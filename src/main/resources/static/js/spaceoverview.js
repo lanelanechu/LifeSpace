@@ -44,7 +44,7 @@ function fetchSpaces() {
         .then(data => {
             //
             spaces = data.map(space => ({
-                id: space.spaceId,
+                spaceId: space.spaceId,
                 name: space.spaceName,
                 location: `台北市松山區${space.spaceFloor}`, // 可從 space.branchId 取得更多資訊
                 price: space.spaceHourlyFee,
@@ -68,7 +68,7 @@ function renderSpaces(spacesToRender) {
     spacesToRender.forEach(space => {
         const spaceCard = document.createElement('div');
         spaceCard.className = 'space-card';
-        spaceCard.dataset.id = space.id;
+        spaceCard.dataset.id = space.spaceId;
         spaceCard.innerHTML = `
             <div class="space-image">    
                 <img src="${getFirstPhoto(space.photo)}" alt="空間圖片">
@@ -76,7 +76,7 @@ function renderSpaces(spacesToRender) {
             <div class="space-info">
                 <div class="space-title">
                     <span>${space.name}</span>
-                    <button class="favorite-btn" data-id="${space.id}">
+                    <button class="favorite-btn" data-id="${space.spaceId}">
                         <i class="far fa-heart"></i>
                     </button>
                 </div>
@@ -97,17 +97,23 @@ function renderSpaces(spacesToRender) {
         `;
         spacesContainer.appendChild(spaceCard);
 
-        // 地圖相關
+        // 地圖放大（會改掉）
         spaceCard.addEventListener('click', () => {
-            if (showMapCheckbox.checked) highlightMarker(space.id);
+            if (showMapCheckbox.checked) highlightMarker(space.spaceId);
         });
 
+        // 加入最愛
         spaceCard.querySelector('.favorite-btn').addEventListener('click', (event) => {
             event.stopPropagation();
             const icon = event.currentTarget.querySelector('i');
             icon.classList.toggle('far');
             icon.classList.toggle('fas');
             event.currentTarget.classList.toggle('active');
+        });
+
+        // 點擊卡片後，跳轉到個別空間頁面
+        spaceCard.addEventListener('click', () => {
+            window.location.href = `individual_space.html?spaceId=${space.spaceId}`;
         });
     });
 }
@@ -116,7 +122,7 @@ function getFirstPhoto(photo) {
     console.log(photo);
 
     if (photo.length === 0) {
-        return "default.png";
+        return "default.jpg";
     }
     return "data:image/jpeg;base64," + photo[0];
 }
@@ -170,10 +176,10 @@ function updateMapMarkers(spacesList) {
             .addTo(map)
             .bindPopup(`<b>${space.name}</b><br>${space.location}<br>$${space.price}/hr`);
 
-        marker.spaceId = space.id;
+        marker.spaceId = space.spaceId;
         markers.push(marker);
 
-        marker.on('click', () => highlightCard(space.id));
+        marker.on('click', () => highlightCard(space.spaceId));
     });
 }
 
@@ -197,6 +203,7 @@ function highlightMarker(spaceId) {
 
 // ============= Event Listeners集中設定 =============
 function setupEventListeners() {
+    // 顯示/隱藏地圖
     showMapCheckbox.addEventListener('change', () => {
         if (showMapCheckbox.checked) {
             mapContainer.classList.remove('hidden');
@@ -206,16 +213,20 @@ function setupEventListeners() {
         }
     });
 
+    // === 篩選條件相關 ===
+    // 篩選條件
     filterButton.addEventListener('click', () => {
         filterPanel.classList.toggle('hidden');
     });
 
+    // 價錢範圍
     priceRange.addEventListener('input', () => {
         filters.maxPrice = parseInt(priceRange.value);
         maxPriceDisplay.textContent = `$${filters.maxPrice}`;
         applyFilters();
     });
 
+    // 距離範圍
     distanceRange.addEventListener('input', () => {
         filters.maxDistance = parseInt(distanceRange.value);
         maxDistanceDisplay.textContent = filters.maxDistance >= 1000
@@ -224,6 +235,7 @@ function setupEventListeners() {
         applyFilters();
     });
 
+    // 人數勾選
     document.querySelectorAll('input[name="people"]').forEach(checkbox => {
         checkbox.addEventListener('change', () => {
             filters.peopleCount = Array.from(document.querySelectorAll('input[name="people"]:checked')).map(input => input.value);
@@ -231,6 +243,7 @@ function setupEventListeners() {
         });
     });
 
+    // 用途篩選
     document.querySelectorAll('input[name="usage"]').forEach(checkbox => {
         checkbox.addEventListener('change', () => {
             filters.usage = Array.from(document.querySelectorAll('input[name="usage"]:checked')).map(input => input.value);
@@ -238,6 +251,7 @@ function setupEventListeners() {
         });
     });
 
+    // 重置篩選
     document.querySelectorAll('.reset-button').forEach(button => {
         button.addEventListener('click', event => {
             const parentClass = event.currentTarget.parentElement.className;
@@ -253,7 +267,9 @@ function setupEventListeners() {
             applyFilters();
         });
     });
+    // === 篩選條件相關 END ===
 }
+
 
 
 

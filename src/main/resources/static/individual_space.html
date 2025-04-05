@@ -121,6 +121,7 @@
                                         data-bs-slide-to="3" aria-label="Slide 4"></button>
                                 </div>
                                 <div class="carousel-inner">
+                                    <!--AJAX導入spacePhotos-->
                                     <div class="carousel-item active">
                                         <img src="images/space/space_2_1.jpeg" class="d-block w-100" alt="...">
                                     </div>
@@ -159,6 +160,7 @@
                                         <line x1="12" y1="17" x2="12" y2="17"></line>
                                     </svg></span> 重要公告</h4>
                             <div class="alert-detail">
+                                <!--AJAX導入spaceAlert-->
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis nulla illum impedit
                                 reiciendis placeat! Libero placeat veniam reiciendis possimus architecto impedit maxime
                                 quis laboriosam natus ex, ratione nihil. Nostrum, omnis.
@@ -190,7 +192,8 @@
                             <div class="space-inf">
                                 <h4>空間介紹</h4>
                                 <div class="space-introduction space-people">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    <!--AJAX導入spacePeople-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round">
                                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -199,7 +202,8 @@
                                     可容納人數：4 人
                                 </div>
                                 <div class="space-introduction space-address">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    <!--AJAX導入branchAddress + spaceFloor-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round">
                                         <path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"></path>
@@ -208,7 +212,8 @@
                                     台北市中正區北平東路1000號10樓
                                 </div>
                                 <div class="space-introduction space-size">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    <!--Ajax導入spaceSize-->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round">
                                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -216,7 +221,9 @@
                                     </svg>
                                     空間大小：4.5 坪
                                 </div>
-                                <div class="space-introduction space-description">Lorem ipsum dolor sit, amet
+                                <div class="space-introduction space-description">
+                                    <!--Ajax導入spaceDesc-->
+                                    Lorem ipsum dolor sit, amet
                                     consectetur adipisicing elit. Id neque repudiandae animi
                                     voluptatibus vitae similique maxime. Officiis cum quo debitis a. Soluta quis
                                     praesentium dolor voluptatem beatae sunt facilis iusto.
@@ -228,7 +235,7 @@
                                 <h4>空間設備</h4>
                                 <!-- 這裡使用 row + col，讓多個項目並排 -->
                                 <div class="row g-3 mb-4 mt-3"><!-- g-3 表示欄位之間的間距 -->
-                                    <!-- 單個項目範例 -->
+                                    <!--Ajax導入spaceEquips-->
                                     <div class="col-md-6 mb-2">
                                         <div class="d-flex align-items-center">
                                             <!-- 可使用 icon 或其他圖案 -->
@@ -279,7 +286,7 @@
                                 <h4>公共設備</h4>
                                 <!-- 這裡使用 row + col，讓多個項目並排 -->
                                 <div class="row g-3 mt-3"><!-- g-3 表示欄位之間的間距 -->
-                                    <!-- 單個項目範例 -->
+                                    <!--Ajax導入publicEquips-->
                                     <div class="col-md-6 mb-2">
                                         <div class="d-flex align-items-center">
                                             <!-- 可使用 icon 或其他圖案 -->
@@ -330,14 +337,14 @@
 
                             <!-- 空間評論 -->
                             <div class="space-comment">
-                                <!-- 分數及評分數 -->
+                                <!--Ajax導入spaceRating-->
                                 <span class="big-star"><i class="fa-solid fa-star"></i></span> <span
                                     class="avg-rating">4.5</span> <span class="total-comments">(1015則評論)</span>
 
                                 <!-- 評論摘要 -->
                                 <div class="container-comment py-4">
                                     <div class="row">
-                                        <!-- First Comment -->
+                                        <!--Ajax導入「評論內容」-->
                                         <div class="col-md-6 mb-4">
                                             <div class="card p-3">
                                                 <div class="d-flex justify-content-between align-items-start">
@@ -416,6 +423,7 @@
                             <div class="transportation">
                                 <h4 class="mb-4">交通資訊</h4>
                                 <div class="trans-address mb-3">
+                                    <!--Ajax導入branchAddress + spaceFloor-->
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round">
@@ -436,24 +444,13 @@
                         <div id="rule-tab" class="tab rule-tab p-3">
                             <div class="rule">
                                 <h4 class="mb-4">使用規範</h4>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
+                                <p>1. 使用時請降低音量，避免跑跳，影響到周邊鄰居們的安寧，如遭檢舉，後果須由空間使用者自行負責。</p>
+                                <p>2. 離開時請自行清潔，將物品歸位，回復使用前擺設，關閉冷氣及電燈，白板擦除，丟棄垃圾請參考現場使用須知，留給下一位使用者乾淨舒適的環境。</p>
+                                <p>3. 若未將租賃空間恢復原狀、造成環境髒亂、遺留垃圾、丟棄之垃圾類型尺寸違反規定，或導致租賃空間裝潢毀損，本公司得依情節輕重，罰款新台幣600元至5,000元，且復原處理之費用另計。</p>
+                                <p>4. 不可丟棄之垃圾類型與尺寸限制，包含但不限於：家庭垃圾、外燴食物、廢棄家具、廢棄醫材、大樓管委會之禁止項目、大型物件。且單件垃圾尺寸長度不得超過 80 cm，或重量不得超過 5 kg，例如：大型包材（紙箱、保麗龍）、廢棄用品（行李箱、白板架）、活動裝飾（聖誕樹、拍攝道具）等。若擔心垃圾可能超過限制，請於預訂前事先詢問，確認是否可協助代收或需額外清潔費用。</p>
+                                <p>5. 禁止烹飪、點燃明火、攜帶寵物（導盲犬不在此限）、危險物品、吸菸、毒品、性愛，以及賭博等違反法令規定、公共秩序或善良風俗的行為。違者將直接取消使用權利，如有任何法律責任，須由空間使用者自行負責。</p>
+                                <p>6. 禁止殯葬禮儀服務﹑活動與行為。（包含但不限於招魂超渡﹑追思會﹑驅邪法會﹑模擬殯葬禮儀之拍攝等活動，及攜帶骨灰罈、神主牌等殯葬相關物品。）</p>
+                                <p>*資料來源：小樹屋</p>
                             </div>
                         </div>
 
@@ -461,24 +458,11 @@
                         <div id="reserve-tab" class="tab reserve-tab p-3">
                             <div class="rule">
                                 <h4 class="mb-4">預訂流程</h4>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
-                                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, quod tempore ipsam
-                                    similique aperiam veritatis voluptatum cum consectetur distinctio unde officia quae
-                                    quisquam nesciunt voluptas quis possimus. Praesentium, neque maxime!</p>
+                                <p>1. 在網站上尋找合適空間，確認好租用時段，輕鬆完成預訂。</p>
+                                <p>2. 您也可以在您預訂的空間舉辦揪團活動，只需要3分鐘填寫活動表單，就可以與您的親朋好友一起狂歡～</p>
+                                <p>3. 透過訂單顯示的專屬密碼，即可在租用時段內自由進出使用場地。</p>
+                                <p>4. 預訂開始時間的 48 小時前，都能回到網站無條件修改或取消訂單。</p>
+                                <p>*資料來源：小樹屋</p>
                             </div>
 
                         </div>
@@ -492,7 +476,10 @@
                         <div class="order-header"
                             style="display: flex; justify-content: space-between; align-items: center;">
                             <!-- 空間名稱 -->
-                            <div class="header-title">空間名稱</div>
+                            <div class="header-title">
+                                <!--Ajax導入spaceName-->
+                                空間名稱
+                            </div>
 
                             <!-- 加入最愛 -->
                             <button id="heart-fav-btn" style="background: none; border: none; cursor: pointer;">
@@ -502,9 +489,11 @@
 
                         <!-- 空間費率 -->
                         <div class="main-price main-hourly-price">
+                            <!--Ajax導入spaceHourlyFee-->
                             $<span id="hourly-price">200</span>/hr
                         </div>
                         <div class="main-price main-daily-price">
+                            <!--Ajax導入spaceDailyFee-->
                             $<span id="daily-price">1500</span>/d
                         </div>
 
@@ -606,6 +595,7 @@
                         <div class="equipment-section">
                             <div class="section-title">租借品項加購</div>
 
+                            <!--Ajax導入「租賃設備名稱」+「加購價」-->
                             <div class="equipment-item">
                                 <div class="equipment-name">設備1 (+$30)</div>
                                 <div class="quantity-control">
@@ -764,7 +754,7 @@
 <!--        </div>-->
     </div>
 
-    <!-- 空間評論modal -->
+    <!-- 空間評論modal Start -->
     <div class="modal hidden">
         <!-- 標題&關閉標籤 -->
         <div class="modal-header">
@@ -968,7 +958,12 @@
             </div>
         </div>
     </div>
+
     <div class="overlay hidden"></div>
+
+    <!-- 空間評論modal End -->
+
+
     <!-- JavaScript Libraries -->
     <script src="js/individual_space.js"></script>
     <script src="js/wow.min.js"></script>
