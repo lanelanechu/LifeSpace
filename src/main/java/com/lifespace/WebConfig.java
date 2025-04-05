@@ -26,6 +26,8 @@ public class WebConfig implements WebMvcConfigurer{
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/event-images/**")
         .addResourceLocations("file:D:/tiba_project/event_images/");// 實際目錄位置
+        registry.addResourceHandler("/space-comment-images/**")
+        .addResourceLocations("file:D:/tiba_project/space_comment_images/");// 實際目錄位置
     }
 }
 

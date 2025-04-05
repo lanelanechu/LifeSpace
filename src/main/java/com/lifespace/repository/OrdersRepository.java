@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface OrdersRepository extends JpaRepository<Orders, String> {
@@ -25,6 +26,14 @@ public interface OrdersRepository extends JpaRepository<Orders, String> {
 
     @EntityGraph(attributePaths = {"rentalItemDetails", "rentalItemDetails.rentalItem", "event"})
     List<Orders> findByMember_MemberIdAndMember_AccountStatus(String memberId, Integer accountStatus);
+    
+    
+    
+    
+    
+    //用舉辦人id以及活動id查詢訂單，作為舉辦者取消活動用
+    Optional<Orders> findByEventEventIdAndMemberMemberId(String eventId, String memberId);
+    
 }
 
 

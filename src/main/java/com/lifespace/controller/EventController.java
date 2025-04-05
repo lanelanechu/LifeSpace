@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.lifespace.dto.EventMemberResponse;
 import com.lifespace.dto.EventRequest;
 import com.lifespace.dto.EventResponse;
 import com.lifespace.entity.Event;
@@ -38,14 +38,14 @@ import jakarta.validation.constraints.Min;
 public class EventController {
 
 	@Autowired
-	EventService eventSvc;
+	private EventService eventSvc;
 	
 	@Autowired
-	EventPhotoService eventPhotoSvc;
+	private EventPhotoService eventPhotoSvc;
 	
 	@Autowired
     private EventRepository eventRepository;
-
+	
 	@PostMapping("/add")
     public String insert(
             @RequestPart("eventRequest") EventRequest eventRequest,
@@ -62,7 +62,9 @@ public class EventController {
     }
     
     @PutMapping("/addMemToEvent")
-    public String addToEvent(@RequestParam(required = true) String eventId, @RequestParam(required = true) String memberId) {
+    public String addToEvent(@RequestParam(required = true) String eventId, @RequestParam(required = true) String memberId)
+    		throws Exception {
+    	
     	eventSvc.addMemberToEvent(memberId, eventId);
         return "執行add event member jpa方法";
     }
@@ -93,7 +95,7 @@ public class EventController {
         return event;
     }
     
-    
+ 
     @GetMapping("/search/native")
     public ResponseEntity<Page<EventResponse>> searchEvents( @RequestParam(required = false) String eventName,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
@@ -117,6 +119,42 @@ public class EventController {
         pageable);
         
         return ResponseEntity.ok(result);
+    }
+    
+    //使用者根據種類篩選出活動列表 
+    @GetMapping("/search/ByMember")
+    public ResponseEntity<Page<EventMemberResponse>> filterEventsByUser(
+    		@RequestParam(required = true) String userCategory,
+    		@RequestParam(required = false) String memberId,
+            @RequestParam(required = false) String participateStatus,
+            @RequestParam(required = false) String eventStatus,
+            @RequestParam(required = false) String organizerId,
+            @RequestParam(defaultValue = "5") @Max(10) @Min(0) Integer size,
+            @RequestParam(defaultValue = "0") @Min(0) Integer page) {
+        // 創建分頁和排序條件
+        Pageable pageable = PageRequest.of( page, size
+        			//Sort.by("eventStartTime").descending()
+        );
+        // 處理空字符串
+        memberId = (memberId != null && memberId.trim().isEmpty()) ? null : memberId;
+        participateStatus = (participateStatus != null && participateStatus.trim().isEmpty()) ? null : participateStatus;
+        eventStatus = (eventStatus != null && eventStatus.trim().isEmpty()) ? null : eventStatus;
+        organizerId = (organizerId != null && organizerId.trim().isEmpty()) ? null : organizerId;
+       
+        Page<EventMemberResponse> result = eventSvc.filterEventsByUser(
+        		userCategory, memberId, participateStatus, eventStatus, organizerId, pageable);
+        
+        return ResponseEntity.ok(result);
+    }
+    
+    //舉辦者取消活動
+    @GetMapping("/cancell")
+    public String cancellEvent(
+    		@RequestParam(required = true) String organizerId, 
+    		@RequestParam(required = true) String eventId){
+    		
+    	eventSvc.cancellEvent(organizerId, eventId);
+		return "執行cancell event by organizer jpa方法";	
     }
     
 }
