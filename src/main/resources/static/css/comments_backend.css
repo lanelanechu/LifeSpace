@@ -1,0 +1,193 @@
+/* Sidebar styles */
+:root {
+    --sidebar-bg: #e6f7f8;
+    --sidebar-color: #333;
+    --primary-color: #70b6c1;
+    --hover-color: #5a9da7;
+    --light-gray: #f8f9fa;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+.sidebar {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-color);
+    height: 100vh;
+    position: fixed;
+    padding: 20px 0;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    position: fixed;
+    top: 0;               /* 關鍵：貼齊頂部 */
+    left: 0;
+    height: 100vh;
+    z-index: 1030;        /* 確保不被其他元素遮住 */
+}
+
+.sidebar-header {
+    padding: 0 20px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-logo {
+    max-width: 140px;
+    margin-bottom: 5px;
+}
+
+.sidebar-title {
+    font-size: 18px;
+    text-align: center;
+}
+
+.nav-link {
+    color: var(--sidebar-color);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    /*transition: all 0.3s;*/
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.nav-link:hover, .nav-link.active {
+    background-color: rgba(112, 182, 193, 0.2);
+}
+
+.nav-link i {
+    width: 24px;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.submenu {
+    padding-left: 34px;
+    display: none;
+    list-style: none;
+}
+
+.submenu.show {
+    display: block;
+}
+
+.submenu-item {
+    font-size: 13px;       /* 字體大小可以依你需求調整 */
+    font-weight: bold;     /* 粗體 */
+    padding: 6px 20px;
+    display: flex;
+    align-items: center;
+    color: var(--sidebar-color);
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 13px;
+    padding: 10px 20px;
+    background-color: #fafafa;
+    border-left: 3px solid #ccc;
+}
+
+.submenu-item:hover, .submenu-item.active {
+    background-color: rgba(112, 182, 193, 0.2);
+}
+
+.submenu-item i {
+    margin-right: 10px;
+    font-size: 6px;
+    width: 8px;
+}
+
+
+@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        z-index: 1000;
+        height: 100vh;
+        overflow-y: auto;
+        transition: left 0.3s;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+}
+
+.main-content {
+    margin-left: 16%; /* 確保主內容不會被擠壓 */
+    padding: 20px;
+    width: 84%;
+}
+
+.btn.btn-primary {
+    background-color: #6AC0BD;
+    color: white;
+}
+
+.message-board-container {
+    position: sticky;
+    bottom: 20px;
+    right: 20px;
+    width: 600px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* 如果留言被隱藏，為該行添加特殊樣式 */
+.comment-status-hidden {
+    background-color: #f8d7da !important;
+}
+
+.btn-hide {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-show {
+    background-color: #198754;
+    color: white;
+}
+
+
+/* 側邊欄響應式 */
+/*@media (max-width: 768px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px; *//* 預設收起來 *//*
+        width: 250px;
+        height: 100vh;
+        background-color: #f8f9fa;
+        overflow-y: auto;
+        transition: left 0.3s ease-in-out;
+        z-index: 1000;
+    }*/
+
+    /*.sidebar.show {
+        left: 0; *//* 展開 *//*
+    }*/
+
+    /* .main-content {
+        margin-left: 0 !important;
+        padding: 15px;
+    }
+
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+    }
+} */
+
