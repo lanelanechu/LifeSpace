@@ -10,7 +10,7 @@
 body {
     background-color: #f5f5f5;
 }
- 
+
 .sidebar {
     background-color: var(--sidebar-bg);
     color: var(--sidebar-color);
@@ -19,10 +19,8 @@ body {
     padding: 20px 0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
-    position: fixed;
     top: 0;               /* 關鍵：貼齊頂部 */
     left: 0;
-    height: 100vh;
     z-index: 1030;        /* 確保不被其他元素遮住 */
 }
 
@@ -44,95 +42,95 @@ body {
 
 /* 整合後的導航選單樣式 */
 .nav-link {
-  color: var(--sidebar-color);
-  padding: 12px 20px;
-  display: flex;
-  align-items: center;
-  transition: all 0.3s;
-  font-size: 15px;
-  font-weight: bold;
+    color: var(--sidebar-color);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .nav-link:hover, .nav-link.active {
-  background-color: rgba(112, 182, 193, 0.2);
+    background-color: rgba(112, 182, 193, 0.2);
 }
 
 .nav-link.active {
-  color: #007bff !important;
+    color: #007bff !important;
 }
 
 .nav-link i {
-  width: 24px;
-  margin-right: 10px;
-  text-align: center;
+    width: 24px;
+    margin-right: 10px;
+    text-align: center;
 }
 
 /* 箭頭方向控制 */
 .nav-link .fa-chevron-down {
-  transform: rotate(-90deg);
-  transition: transform 0.3s ease;
-  margin-left: auto;
+    transform: rotate(-90deg);
+    transition: transform 0.3s ease;
+    margin-left: auto;
 }
 
 .nav-link.active .fa-chevron-down {
-  transform: rotate(0deg);
+    transform: rotate(0deg);
 }
 
 /* 子選單樣式 */
 .submenu {
-  padding-left: 34px;
-  display: none;
+    padding-left: 34px;
+    display: none;
 }
 
 .submenu.show {
-  display: block;
+    display: block;
 }
 
 .submenu-item {
-  position: relative;
-  padding: 8px 15px 8px 30px;
-  display: flex;
-  align-items: center;
-  color: var(--sidebar-color);
-  text-decoration: none;
-  transition: all 0.3s;
-  font-size: 14px;
+    position: relative;
+    padding: 8px 15px 8px 30px;
+    display: flex;
+    align-items: center;
+    color: var(--sidebar-color);
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 14px;
 }
 
 .submenu-item:hover, .submenu-item.active {
-  background-color: rgba(112, 182, 193, 0.2);
+    background-color: rgba(112, 182, 193, 0.2);
 }
 
 .submenu-item.active {
-  color: #007bff !important;
-  font-weight: 600;
+    color: #007bff !important;
+    font-weight: 600;
 }
 
 /* 子選單前的圓點 */
 .submenu-item::before {
-  content: '';
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #333;
-  display: block;
+    content: '';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #333;
+    display: block;
 }
 
 .submenu-item.active::before {
-  background-color: #007bff;
+    background-color: #007bff;
 }
 
 .submenu li {
-  list-style-type: none; /* 移除列表標記 */
+    list-style-type: none; /* 移除列表標記 */
 }
 
 /* 確保箭頭位置正確 */
 .nav-link .ms-auto {
-  margin-left: auto !important;
+    margin-left: auto !important;
 }
 
 

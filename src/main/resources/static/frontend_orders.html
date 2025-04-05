@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>訂單管理</title>
+
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="images/favicon.ico" rel="icon">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap2.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/orders_frontend.css">
+</head>
+<body>
+<div class="container-xxl bg-white p-0">
+    <!-- Spinner Start -->
+    <div id="spinner"
+         class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Header Navbar Start -->
+    <div class="container-fluid nav-bar bg-transparent">
+        <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+            <a href="#" class="navbar-brand d-flex align-items-center text-center">
+                <div class="icon p-2 me-2">
+                    <img class="img-fluid" src="images/img.bootstrap/LifeSpace.png" alt="Icon"
+                         style="width: 30px; height: 30px;">
+                </div>
+                <!-- <h1 class="m-0 text-primary">Makaan</h1> -->
+                <img class="img-fluid" src="images/img.bootstrap/LifeSpace2.png" alt="Icon"
+                     style="width: 200px; height: 60px;">
+            </a>
+            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto">
+                    <a href="#" class="nav-item nav-link active">Home</a>
+                    <a href="spaceoverview.html" class="nav-item nav-link">瀏覽空間</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">客服中心</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="" class="dropdown-item">常見問題</a>
+                            <a href="" class="dropdown-item">線上客服</a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">參與活動</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="#" class="dropdown-item">Testimonial</a>
+                            <a href="#" class="dropdown-item">404 Error</a>
+                        </div>
+                    </div>
+                    <a href="" class="nav-item nav-link">我的最愛</a>
+                </div>
+                <!-- <a href="" class="btn btn-primary px-3 d-none d-lg-flex"> -->
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> <i
+                            class="bi bi-person-circle">會員資料</i></a>
+                    <div class="dropdown-menu rounded-0 m-0">
+                        <a href="" class="dropdown-item">我的帳號</a>
+                        <a href="" class="dropdown-item">訂單</a>
+                        <a href="" class="dropdown-item">我參與的活動</a>
+                        <a href="" class="dropdown-item">優惠券管理</a>
+                        <a href="" class="dropdown-item">我的最愛</a>
+                        <a href="" class="dropdown-item">常見問題</a>
+                        <a href="property-agent.html" class="dropdown-item">登出</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Header Navbar End -->
+
+    <!-- Modal Start -->
+    <div class="modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal End -->
+
+    <!-- 頁籤選單 -->
+    <div class="tabs">
+        <div class="tab active" data-tab="space-orders">空間訂單</div>
+        <div class="tab" data-tab="history-orders">歷史訂單</div>
+        <div class="tab" data-tab="cancel-orders">已取消訂單</div>
+    </div>
+
+    <!-- 空間訂單 -->
+    <div id="space-orders" class="tab-content active">
+        <div class="order-container">
+            <div class="order-img">
+                <img src="images\img.bootstrap\house3.jpg" alt="商品圖片">
+            </div>
+            <div class="order-info">
+                <p>訂單編號: xxxxxxxxxx</p>
+                <p>日期: 2025/08/02</p>
+                <p>時段: 08:00 - 14:00</p>
+                <p>地點: 臺北市中山區林森北路119巷26號</p>
+                <p>訂單金額: 580</p>
+
+                <button class="toggle-details">揪團資訊 ▼</button>
+
+                <div class="details">
+                    <p>活動名稱：打桌遊</p>
+                    <p>活動描述：好玩的桌遊</p>
+                </div>
+
+                <div class="actions">
+                    <button class="action-button message-button">留言板</button>
+                    <button class="action-button cancel">取消訂單</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-container">
+            <div class="order-img">
+                <img src="images\img.bootstrap\house4.jpg" alt="商品圖片">
+            </div>
+            <div class="order-info">
+                <p>訂單編號: yyyyyyyyyy</p>
+                <p>日期: 2025/09/01</p>
+                <p>時段: 10:00 - 16:00</p>
+                <p>地點: 臺北市中山區林森北路119巷26號</p>
+                <p>訂單金額: 580</p>
+
+                <div class="actions">
+                    <button class="action-button group-button">揪團去</button>
+                    <button class="action-button cancel">取消訂單</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 歷史訂單 -->
+    <div id="history-orders" class="tab-content">
+        <div class="order-container">
+            <div class="order-img">
+                <img src="images\img.bootstrap\house1.jpg" alt="商品圖片">
+            </div>
+            <div class="order-info">
+                <p>訂單編號: zzzzzzzzzz</p>
+                <p>日期: 2025/07/20</p>
+                <p>時段: 12:00 - 18:00</p>
+                <p>地點: 臺北市中山區林森北路119巷26號</p>
+                <p>訂單金額: 580</p>
+
+                <div class="actions">
+                    <button class="action-button review">評價</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 取消訂單確認對話框 -->
+    <div class="cancel-dialog">
+        <div class="cancel-dialog-content">
+            <div class="cancel-dialog-title">取消訂單</div>
+            <p>您確定要取消這筆訂單嗎？取消後將無法恢復。</p>
+            <div class="cancel-reason">
+                <select id="cancel-reason-select" class="form-select">
+                    <option value="">請選擇取消原因</option>
+                    <option value="schedule-conflict">人數不足</option>
+                    <option value="found-better">找到更適合的場地</option>
+                    <option value="price-issue">價格因素</option>
+                    <option value="personal-issue">個人因素</option>
+                    <option value="other">其他原因</option>
+                </select>
+                <textarea id="cancel-reason-other" class="form-control mt-2" style="display:none;"
+                          placeholder="請說明取消原因..."></textarea>
+            </div>
+            <div class="cancel-dialog-buttons">
+                <button class="cancel-back-btn">返回</button>
+                <button class="cancel-confirm-btn">確認取消</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-dialog">
+        <div class="review-dialog-content">
+            <div class="review-dialog-title">評價與評論</div>
+
+            <!-- 星級評分 -->
+            <div class="rating-container">
+                <div class="rating">
+                    <input type="radio" id="star5" name="rating" value="5"/>
+                    <label for="star5" title="5分"></label>
+                    <input type="radio" id="star4" name="rating" value="4"/>
+                    <label for="star4" title="4分"></label>
+                    <input type="radio" id="star3" name="rating" value="3"/>
+                    <label for="star3" title="3分"></label>
+                    <input type="radio" id="star2" name="rating" value="2"/>
+                    <label for="star2" title="2分"></label>
+                    <input type="radio" id="star1" name="rating" value="1"/>
+                    <label for="star1" title="1分"></label>
+                </div>
+            </div>
+
+            <!-- 照片上傳區域 -->
+            <div class="photo-upload-container" id="dropArea">
+                <p>拖曳照片至此處或點擊下方按鈕上傳（最多5張）</p>
+                <div class="photo-preview" id="photoPreview"></div>
+                <label for="photoUpload" class="file-upload-label">
+                    <i class="fas fa-upload"></i> 選擇照片
+                </label>
+                <input type="file" id="photoUpload" class="file-upload-input" accept="image/*" multiple>
+            </div>
+
+            <!-- 評論文字框 -->
+            <textarea class="review-text" placeholder="請給予我們寶貴的意見及鼓勵"></textarea>
+
+            <!-- 按鈕 -->
+            <div class="review-dialog-buttons">
+                <button class="review-cancel-btn">取消</button>
+                <button class="review-submit-btn">提交評價</button>
+            </div>
+        </div>
+    </div>
+    <!-- JavaScript Libraries -->
+    <script src="js/wow.min.js"></script>
+    <script src="js/easing.min.js"></script>
+    <script src="js/waypoints.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".tab").click(function () {
+                var tabId = $(this).data("tab");
+                $(".tab").removeClass("active");
+                $(this).addClass("active");
+                $(".tab-content").removeClass("active").hide(); // 隱藏所有內容
+                $("#" + tabId).addClass("active").fadeIn(); // 顯示選中的內容
+            });
+
+            $(document).on("click", ".toggle-details", function () {
+                var details = $(this).next(".details");
+                if (details.is(":visible")) {
+                    details.slideUp();
+                    $(this).text("揪團資訊 ▼");
+                } else {
+                    details.slideDown();
+                    $(this).text("揪團資訊 ▲");
+                }
+            });
+
+            $(document).on("click", ".group-button", function () {
+                var button = $(this);
+                var confirmGroup = confirm("確定要進行揪團嗎？");
+                if (confirmGroup) {
+                    setTimeout(function () {
+                        alert("揪團成功！");
+                        button.text("留言板").removeClass("group-button").addClass("message-button");
+                        var groupInfo = `
+                        <button class="toggle-details">揪團資訊 ▼</button>
+                            <div class="details">
+                                <h4><strong>活動名稱:</strong> 新的桌遊揪團</h4>
+                                <p><strong>活動描述:</strong> 這是一個新的揪團活動</p>
+                            </div>
+                        `;
+                        button.closest(".actions").before(groupInfo);
+                    }, 500);
+                }
+            });
+
+            // 新增取消訂單功能
+            let currentOrderContainer = null;
+
+            // 點擊取消訂單按鈕
+            $(document).on("click", ".action-button.cancel", function () {
+                currentOrderContainer = $(this).closest(".order-container");
+                $(".cancel-dialog").css("display", "flex").fadeIn();
+
+                // 重置取消原因選項
+                $("#cancel-reason-select").val("");
+                $("#cancel-reason-other").hide().val("");
+            });
+
+            // 如果選擇"其他原因"，顯示文本輸入框
+            $("#cancel-reason-select").change(function () {
+                if ($(this).val() === "other") {
+                    $("#cancel-reason-other").show();
+                } else {
+                    $("#cancel-reason-other").hide();
+                }
+            });
+
+            // 點擊返回按鈕
+            $(".cancel-back-btn").click(function () {
+                $(".cancel-dialog").fadeOut();
+                currentOrderContainer = null;
+            });
+
+            // 點擊確認取消按鈕
+            $(".cancel-confirm-btn").click(function () {
+                let reason = $("#cancel-reason-select").val();
+
+                if (!reason) {
+                    alert("請選擇取消原因");
+                    return;
+                }
+
+                if (reason === "other" && !$("#cancel-reason-other").val().trim()) {
+                    alert("請說明取消原因");
+                    return;
+                }
+
+                if (currentOrderContainer) {
+                    // 先關閉確認對話框
+                    $(".cancel-dialog").fadeOut();
+
+                    // 等待對話框完全關閉後再處理訂單
+                    setTimeout(function () {
+                        // 標記訂單為已取消
+                        currentOrderContainer.addClass("cancelled-order");
+
+                        // 添加已取消標籤到訂單編號後
+                        let orderNumberElem = currentOrderContainer.find(".order-info p:first-child");
+                        if (!orderNumberElem.find(".cancelled-tag").length) {
+                            orderNumberElem.append('<span class="cancelled-tag">已取消</span>');
+                        }
+
+                        // 禁用所有按鈕
+                        currentOrderContainer.find(".action-button").prop("disabled", true);
+                        currentOrderContainer.find(".toggle-details").prop("disabled", true);
+
+                        // 等待訂單更新視覺效果完成後再顯示成功訊息
+                        setTimeout(function () {
+                            alert("訂單已成功取消！");
+                        }, 300);
+
+                        currentOrderContainer = null;
+                    }, 400); // 給予充分時間讓對話框完全關閉
+                }
+            });
+
+            $(document).ready(function () {
+                $(".tab-content").hide(); // 先隱藏所有內容
+                $("#space-orders").show(); // 預設顯示空間訂單
+
+                $(".tab").click(function () {
+                    var tabId = $(this).data("tab");
+
+                    $(".tab").removeClass("active");
+                    $(this).addClass("active");
+
+                    $(".tab-content").hide(); // 隱藏所有內容
+                    $("#" + tabId).fadeIn(); // 顯示選中的內容
+                });
+            });
+
+            // 評價相關的 jQuery 代碼
+            $(document).ready(function () {
+                // 儲存當前評價的訂單和上傳的照片
+                var currentReviewOrder = null;
+                var uploadedPhotos = [];
+
+                // 點擊評價按鈕
+                $(document).on("click", ".action-button.review", function () {
+                    currentReviewOrder = $(this).closest(".order-container");
+                    $(".review-dialog").css("display", "flex").fadeIn();
+
+                    // 重置評價表單
+                    $("input[name='rating']").prop("checked", false);
+                    $(".review-text").val("");
+                    $("#photoPreview").empty();
+                    uploadedPhotos = [];
+                });
+
+                // 點擊取消評價按鈕
+                $(".review-cancel-btn").click(function () {
+                    $(".review-dialog").fadeOut();
+                    currentReviewOrder = null;
+                });
+
+                // 照片上傳處理
+                $("#photoUpload").change(function (e) {
+                    handleFiles(e.target.files);
+                });
+
+                // 拖放照片功能 - 使用jQuery實現
+                var $dropArea = $("#dropArea");
+
+                $dropArea.on('dragenter dragover', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).addClass('highlight');
+                });
+
+                $dropArea.on('dragleave drop', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $(this).removeClass('highlight');
+                });
+
+                $dropArea.on('drop', function (e) {
+                    e.preventDefault();
+                    var files = e.originalEvent.dataTransfer.files;
+                    handleFiles(files);
+                });
+
+                // 處理上傳的照片文件
+                function handleFiles(files) {
+                    if (uploadedPhotos.length >= 5) {
+                        alert("最多只能上傳5張照片");
+                        return;
+                    }
+
+                    // 將FileList轉換為Array
+                    var filesArray = $.makeArray(files);
+
+                    // 限制最多5張照片
+                    var remainingSlots = 5 - uploadedPhotos.length;
+                    var filesToProcess = filesArray.slice(0, remainingSlots);
+
+                    $.each(filesToProcess, function (index, file) {
+                        if (!file.type.match('image.*')) {
+                            alert("請只上傳圖片檔案");
+                            return;
+                        }
+
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            uploadedPhotos.push({
+                                file: file,
+                                dataUrl: e.target.result
+                            });
+
+                            displayPhotos();
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                }
+
+                // 顯示已上傳的照片
+                function displayPhotos() {
+                    var $photoPreview = $("#photoPreview");
+                    $photoPreview.empty();
+
+                    $.each(uploadedPhotos, function (index, photo) {
+                        var $photoItem = $('<div class="photo-item"></div>');
+                        var $img = $('<img>').attr('src', photo.dataUrl);
+                        var $removeBtn = $('<button class="remove-photo">×</button>');
+
+                        $removeBtn.on('click', function () {
+                            uploadedPhotos.splice(index, 1);
+                            displayPhotos();
+                        });
+
+                        $photoItem.append($img, $removeBtn);
+                        $photoPreview.append($photoItem);
+                    });
+                }
+
+                // 點擊提交評價按鈕
+                $(".review-submit-btn").click(function () {
+                    // 獲取評分
+                    var rating = $("input[name='rating']:checked").val();
+                    // 獲取評論文字
+                    var reviewText = $(".review-text").val().trim();
+
+                    // 驗證
+                    if (!rating) {
+                        alert("請為此次體驗評分");
+                        return;
+                    }
+
+                    if (!reviewText) {
+                        alert("請分享您的使用體驗");
+                        return;
+                    }
+
+                    if (currentReviewOrder) {
+                        // 關閉評價對話框
+                        $(".review-dialog").fadeOut();
+
+                        // 處理評價提交邏輯
+                        setTimeout(function () {
+                            // 在訂單編號後添加已評價標籤
+                            var $orderNumberElem = currentReviewOrder.find(".order-info p:first-child");
+                            if ($orderNumberElem.find(".reviewed-tag").length === 0) {
+                                $orderNumberElem.append('<span class="reviewed-tag">已評價</span>');
+                            }
+
+                            // 禁用評價按鈕
+                            currentReviewOrder.find(".action-button.review").prop("disabled", true);
+
+                            // 顯示評價成功訊息
+                            setTimeout(function () {
+                                alert("評價提交成功！感謝您的反饋。");
+                            }, 300);
+
+                            currentReviewOrder = null;
+                            uploadedPhotos = [];
+                        }, 400);
+                    }
+                });
+            });
+        });
+
+
+    </script>
+    <!-- Footer Start -->
+    <div class="container-fluid bg-light text-black-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-black mb-4">
+                        <img class="img-fluid" src="images/img.bootstrap/LifeSpace3.png" alt="Icon"
+                             style="width: 250px; height: 60px;">
+                    </h5>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-black mb-4">Quick Links</h5>
+                    <a class="btn btn-link text-black-50" href="">About Us</a>
+                    <a class="btn btn-link text-black-50" href="">Contact Us</a>
+                    <a class="btn btn-link text-black-50" href="">Our Services</a>
+                    <a class="btn btn-link text-black-50" href="">Privacy Policy</a>
+                    <a class="btn btn-link text-black-50" href="">Terms & Condition</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-black mb-4">Photo Gallery</h5>
+                    <div class="row g-2 pt-2">
+                        <div class="col-4">
+                            <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-1.jpg"
+                                 alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-2.jpg"
+                                 alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-3.jpg"
+                                 alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-4.jpg"
+                                 alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-5.jpg"
+                                 alt="">
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-6.jpg"
+                                 alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-black mb-4">Newsletter</h5>
+                    <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                    <div class="position-relative mx-auto" style="max-width: 400px;">
+                        <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
+                               placeholder="Your email">
+                        <button type="button"
+                                class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
+
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="">Home</a>
+                            <a href="">Cookies</a>
+                            <a href="">Help</a>
+                            <a href="">FQAs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top (改客服) -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+</div>
+
+
+</body>
+</html>

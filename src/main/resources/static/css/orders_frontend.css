@@ -1,0 +1,442 @@
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container-xxl.bg-white {
+    background-color: #EFFDF5 !important;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    border-bottom: 2px ;
+    background-color: #EFFDF5;
+    margin-left: 160px;
+}
+
+/* 頁籤標籤 */
+.tab {
+    padding: 12px 20px;
+    cursor: pointer;
+    color: #888;
+    font-size: 16px;
+    font-weight: normal;
+    position: relative;
+    transition: color 0.3s ease;
+    right: 500px;
+}
+
+/* 當頁籤被選中時 */
+.tab.active {
+    color: #00b98e;
+    font-weight: bold;
+    border-bottom: 3px solid rgb(124, 187, 124); /* 添加底線 */
+}
+
+/* 訂單區塊 */
+.order-container {
+    display: flex;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin: 0px 10px 0px 40px;
+    width: 1000px;
+    background-color: #fff;
+    border-radius: 8px;
+}
+.order-img {
+    width: 170px;
+    height: 170px;
+    background-color: #ddd;
+    margin:10px 15px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0; /* 確保圖片大小不會縮小 */
+}
+.order-img img {
+    width: 100%;
+    height: 100%;
+}
+.order-info {
+    flex: 1;
+    border: 2px ;
+    padding: 10px;
+}
+
+.details {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px ;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+.actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 10px;
+
+}
+/* 按鈕設計 */
+.toggle-details {
+    cursor: pointer;
+    background-color:rgb(124, 187, 124);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+.action-button {
+    background-color: rgb(124, 187, 124);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+.action-button.cancel {
+    background-color: #6c757d;
+    /* border:1px solid red; */
+}
+.action-button.review {
+    /* border:1px solid red; */
+    background-color: rgb(124, 187, 124);
+}
+.tab-content {
+    display: none; /* 預設隱藏所有內容 */
+    background-color: #EFFDF5;
+    /* border:1px solid red; */
+}
+
+.space-orders {
+    display: block; /* 預設顯示空間訂單 */
+    background-color: #EFFDF5;
+    height: 100%;
+    /* border:1px solid red; */
+}
+.history-orders {
+    background-color: #EFFDF5;
+    height: 100%;
+}
+
+
+#space-orders, #history-orders {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* 設定訂單之間的間隔 */
+    padding: 20px 0; /* 可選：增加上下內距 */
+}
+
+/* 取消訂單確認對話框 */
+.cancel-dialog {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.cancel-dialog-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%;
+}
+
+.cancel-dialog-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.cancel-dialog-buttons {
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.cancel-dialog-buttons button {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
+.cancel-confirm-btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: rgb(124, 187, 124);
+    color: white;
+}
+
+.cancel-back-btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #6c757d;
+    color: white;
+}
+
+/* 已取消訂單樣式 */
+.cancelled-order {
+    opacity: 0.5;
+}
+
+.cancelled-tag {
+    display: inline-block;
+    background-color: #6c757d;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+/* 評價對話框樣式 */
+.review-dialog {
+    display: none;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.review-dialog-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.review-dialog {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999; /* 確保遠高於 Header 的 z-index */
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.review-dialog-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 500px;
+    max-width: 90%;
+    max-height: 90vh;
+    position: relative;
+    z-index: 10000; /* 比背景遮罩更高 */
+}
+
+.review-dialog-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+/* 星級評分 */
+.rating-container {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.rating-container p {
+    margin-bottom: 12px;
+    font-size: 16px;
+    color: #444;
+}
+
+.rating {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    font-size: 40px;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label {
+    cursor: pointer;
+    color: #e0e0e0;
+    padding: 0 5px;
+    transition: all 0.2s ease;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+.rating label:before {
+    content: '★';
+}
+
+.rating input:checked ~ label {
+    color: #FFD700; /* 金黃色 */
+    transform: scale(1.1);
+}
+
+.rating label:hover,
+.rating label:hover ~ label {
+    color: #FFDF00; /* 懸停時稍微不同的金色 */
+    transform: scale(1.15);
+    transition: 0.2s;
+}
+
+/* 星星點擊時的動畫效果 */
+.rating label:active {
+    transform: scale(0.9);
+    transition: 0.1s;
+}
+/* 照片上傳區域樣式 */
+.photo-upload-container {
+    margin-bottom: 20px;
+    border: 2px dashed #ccc;
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #f9f9f9;
+}
+
+.photo-upload-container p {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.photo-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.photo-item {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #eee;
+}
+
+.photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.remove-photo {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 評論文字框樣式 */
+.review-text {
+    width: 100%;
+    min-height: 120px;
+    max-height: 300px; /* 如果想限制最大高度 */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    resize: none; /* 移除調整大小的控制點 */
+    overflow: auto; /* 需要時出現滾動條 */
+    box-sizing: border-box; /* 保證寬度包含邊框和內距 */
+}
+
+/* 按鈕樣式 */
+.review-dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.review-submit-btn {
+    background-color: rgb(124, 187, 124);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.review-cancel-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 文件上傳按鈕樣式 */
+.file-upload-label {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.file-upload-input {
+    display: none;
+}
+
+/* 已完成評價的訂單標籤 */
+.reviewed-tag {
+    display: inline-block;
+    background-color: rgb(124, 187, 124);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+/* 拖放區域高亮樣式 */
+.highlight {
+    border-color: rgb(124, 187, 124) !important;
+    background-color: rgba(124, 187, 124, 0.1) !important;
+}
