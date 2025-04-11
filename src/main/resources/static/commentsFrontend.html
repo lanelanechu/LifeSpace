@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>LifeSpace | 活動留言板</title>
+  
+  <!-- index -->
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="images/favicon.ico" rel="icon">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Inter:wght@700;800&display=swap"
+        rel="stylesheet">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link href="css/animate.min.css" rel="stylesheet">
+  <link href="css/owl.carousel.min.css" rel="stylesheet">
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="css/bootstrap2.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.6.1/dist/nouislider.min.css" />
+
+  <!-- Template Stylesheet -->
+  <link href="css/style.css" rel="stylesheet">
+
+  <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+  <!------ Include the above in your HEAD tag ---------->
+
+  <!-- <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet"> -->
+
+  <!-- 人工回復聊天按鈕 -->
+<!--   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> -->
+
+ 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  
+  <link rel="stylesheet" href="css/comments_frontend.css">
+  
+  <!-- slick 輪播樣式 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  
+  <style>
+   	/* index */
+    .mic-button {
+        position: fixed;
+        top: 70%;
+        /* 將頂部位置設定為 50% */
+        right: 20px;
+        transform: translateY(-50%);
+        /* 使用 transform 將按鈕垂直置中 */
+        z-index: 1000;
+    }
+    /* index結束 */
+    
+    body {
+      background-color: #f0f2f5;
+      padding: 2rem;
+      font-family: "Microsoft JhengHei", sans-serif;
+    }
+
+    .comment-box {
+      background: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      position: relative;
+      transition: background 0.2s;
+    }
+
+    .comment-box:hover .options-btn {
+      visibility: visible;
+    }
+
+    .profile-img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+
+    .comment-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .comment-meta {
+      font-weight: bold;
+      font-size: 0.95rem;
+    }
+
+    .comment-time {
+      color: #888;
+      font-size: 0.8rem;
+      margin-left: 8px;
+    }
+
+    .comment-message {
+      font-size: 1rem;
+      white-space: pre-wrap;
+    }
+
+    .options-btn {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      visibility: hidden;
+      cursor: pointer;
+    }
+
+    .tooltip-text {
+      position: absolute;
+      top: -26px;
+      right: 0;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 6px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 999;
+    }
+
+    .options-btn:hover + .tooltip-text {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .dropdown-menu {
+      z-index: 1000;
+    }
+
+    .reply-btn {
+      font-size: 0.8rem;
+      color: #1877f2;
+      background: none;
+      border: none;
+      padding: 0;
+      margin-top: 4px;
+      cursor: pointer;
+    }
+
+    #newCommentInput {
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 24px;
+      border: 1px solid #ccc;
+      outline: none;
+    }
+
+    #newCommentInput:focus {
+      border-color: #1877f2;
+    }
+
+    .edit-input {
+      width: 100%;
+      border: none;
+      background: #f0f2f5;
+      border-radius: 6px;
+      padding: 6px 10px;
+    }
+
+    #noCommentMessage {
+      text-align: center;
+      color: #888;
+      margin-bottom: 1rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Spinner Start -->
+        <div id="spinner"
+             class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Header Navbar Start -->
+        <div class="container-fluid nav-bar bg-transparent">
+            <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
+                <a href="#" class="navbar-brand d-flex align-items-center text-center">
+                    <div class="icon p-2 me-2">
+                        <img class="img-fluid" src="images/img.bootstrap/LifeSpace.png" alt="Icon" style="width: 30px; height: 30px;">
+                    </div>
+                    <!-- <h1 class="m-0 text-primary">Makaan</h1> -->
+                    <img class="img-fluid" src="images/img.bootstrap/LifeSpace2.png" alt="Icon" style="width: 200px; height: 60px;">
+                </a>
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto">
+                        <a href="#" class="nav-item nav-link active">Home</a>
+                        <a href="spaceoverview.html" class="nav-item nav-link">瀏覽空間</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">客服中心</a>
+                            <div class="dropdown-menu rounded-0 m-0">
+                                <a href="" class="dropdown-item">常見問題</a>
+                                <a href="" class="dropdown-item">線上客服</a>
+                            </div>
+                        </div>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">參與活動</a>
+                            <div class="dropdown-menu rounded-0 m-0">
+                                <a href="#" class="dropdown-item">Testimonial</a>
+                                <a href="#" class="dropdown-item">404 Error</a>
+                            </div>
+                        </div>
+                        <a href="" class="nav-item nav-link">我的最愛</a>
+                    </div>
+                    <!-- <a href="" class="btn btn-primary px-3 d-none d-lg-flex"> -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"> <i
+                                class="bi bi-person-circle">會員資料</i></a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a href="" class="dropdown-item">我的帳號</a>
+                            <a href="" class="dropdown-item">訂單</a>
+                            <a href="" class="dropdown-item">我參與的活動</a>
+                            <a href="" class="dropdown-item">優惠券管理</a>
+                            <a href="" class="dropdown-item">我的最愛</a>
+                            <a href="" class="dropdown-item">常見問題</a>
+                            <a href="property-agent.html" class="dropdown-item">登出</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <!-- Header Navbar End -->
+        
+        <!-- 網頁內容 Start -->
+        
+        <!-- 輪播區（上方） -->
+		<div class="carousel-container">
+		  <div class="myclass"></div>
+		</div>
+		
+		<!-- 活動資訊區（中間） -->
+		<div class="event-info">
+		  <h2 id="eventName"></h2>
+		  <p id="hostSpeaking"></p>
+		  <p id="eventStartTime"></p>
+		  <p id="eventEndTime"></p>
+		  <p id="eventLocation"></p>
+		</div>
+		
+		<!-- 留言區（下方） -->
+		<div class="container" style="max-width: 600px;">
+		  <div id="noCommentMessage">尚無留言</div>
+		  <div id="commentsContainer"></div>
+		  <div class="d-flex align-items-center mt-4">
+		    <img src="https://i.pravatar.cc/40?u=EM001" class="profile-img" />
+		    <input type="text" id="newCommentInput" placeholder="留言……" />
+		  </div>
+		</div>
+        
+        <!-- 照片輪播 -->
+<!-- 	    <div class="carousel-container"> -->
+<!-- 	        <div class="myclass"> -->
+<!-- 	            <div><img src="images/img.bootstrap/yarn.png"></div> -->
+<!-- 	            <div><img src="images/img.bootstrap/board_game.jpg"></div> -->
+<!-- 	            <div><img src="images/img.bootstrap/game_6.png"></div> -->
+<!-- 	            <div><img src="images/img.bootstrap/flower.jpg"></div> -->
+<!-- 	            <div><img src="images/img.bootstrap/study.jpg"></div> -->
+<!-- 	        </div> -->
+<!-- 	    </div> -->
+
+    <script src="vendors/jquery/jquery-3.7.1.min.js"></script>
+    <script src="js/slick.min.js"></script>
+    
+    <!-- 0323增加，活動詳情關聯照片輪播的設定 -->
+<!--     <script>
+        $(document).ready(function() {
+            // 初始化輪播
+            $(".myclass").slick({
+                arrows: true,
+                dots: true,
+                centerMode: true,
+                centerPadding: "60px",
+                slidesToShow: 3,
+                autoplay: true,
+                autoplaySpeed: 4000,
+                pauseOnHover: false,
+                pauseOnFocus: false,
+                pauseOnDotsHover: false,
+                responsive: [{
+                    breakpoint: 768,
+                    settings: {
+                        arrows: false,
+                        centerPadding: "0",
+                        slidesToShow: 1
+                    }
+                }]
+            });
+            
+            // 透過 AJAX 獲取活動資訊
+            $.ajax({
+                url: 'comment.json', // 替換為你的 API 或 JSON 路徑
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (data.events && data.events.length > 0) {
+                        let firstEvent = data.events[0];
+                        $('#host').text(firstEvent.host);
+                        $('#location').text(firstEvent.location);
+                        $('#time').text(firstEvent.time);
+                        $('#more-info').attr('href', firstEvent.moreInfo);
+
+                        // 動態加載圖片到輪播
+                        let carousel = $('.myclass');
+                        firstEvent.images.forEach(img => {
+                            carousel.slick('slickAdd', `<div><img src="${img}" style="width:100%;"></div>`);
+                        });
+                    }
+                },
+                error: function() {
+                    console.error("無法載入活動資料");
+                }
+            });
+        });
+    </script>-->
+    
+
+
+	<script>
+
+	fetch("http://localhost:8080/comments/page", {
+		method: "GET",
+		credentials: "include" // 記得加這個，才會帶 session cookie
+	})
+	
+	
+	const urlParams = new URLSearchParams(window.location.search);
+	const eventId = urlParams.get("eventId");
+	
+// 	if (!eventId) {
+// 		  alert("無法辨識活動 ID");
+// 	}
+
+	
+	$(document).ready(function () {
+	  const eventId = "E001"; // 可以改從 URL 讀取
+	
+	  $.ajax({
+	    url: `/lifespace/event/getOne?eventId=${eventId}`,
+	    method: "GET",
+	    success: function (event) {
+	      // 填活動資訊
+// 	      $("#eventName").text(event.eventName);
+// 	      $("#eventDateTime").text(`${event.startTime} ~ ${event.endTime}`);
+// 	      $("#eventLocation").text(event.eventLocation);
+	      $("#eventName").text(event.eventName);
+	      $("#hostSpeaking").text("主辦人的話：" + (event.hostSpeaking || "尚未提供"));
+	      $("#eventStartTime").text("開始時間：" + (event.eventStartTime || ""));
+	      $("#eventEndTime").text("結束時間：" + (event.eventEndTime || ""));
+// 	      $("#eventLocation").text("地點：" + (event.eventLocation || ""));
+	      $("#eventLocation").text("地點：" + (comment.branchAddr || ""));
+	
+	      // 載入圖片進輪播
+	      const carousel = $('.myclass');
+	      event.photoUrls.forEach(photo => {
+// 	        carousel.append(`<div><img src="${photo}" alt="活動圖片"></div>`);
+	        carousel.append(`<div><img src="http://localhost:8080${photo}" alt="活動圖片"></div>`);
+
+	      });
+	
+	      carousel.slick({
+	        arrows: true,
+	        dots: true,
+	        centerMode: true,
+	        centerPadding: "60px",
+	        slidesToShow: 3,
+	        autoplay: true,
+	        autoplaySpeed: 3000,
+	        responsive: [{
+	          breakpoint: 768,
+	          settings: {
+	            arrows: false,
+	            centerPadding: "0",
+	            slidesToShow: 1
+	          }
+	        }]
+	      });
+	    },
+	    error: function () {
+	      alert("讀取活動資訊失敗！");
+	    }
+	  });
+	});
+	
+	
+	
+  const currentMemberId = 'EM001';
+  let page = 0;
+  let noMoreData = false;
+  let loading = false;
+
+  function loadComments() {
+    if (noMoreData || loading) return;
+    loading = true;
+
+    $.ajax({
+      url: `/comments/page/${page}/5`,
+      method: "GET",
+      success: function (data) {
+        if (page === 0) {
+          $("#commentsContainer").empty();
+          $("#noCommentMessage").toggle(data.length === 0);
+        }
+
+        if (data.length === 0) {
+          noMoreData = true;
+          return;
+        }
+
+        data.forEach(comment => renderComment(comment));
+        page++;
+        loading = false;
+      },
+      error: function () {
+        alert("無法載入留言資料");
+        loading = false;
+      }
+    });
+  }
+
+  function renderComment(comment, returnBox = false) {
+	  const isOwner = comment.eventMemberId === currentMemberId;
+	  const commentId = comment.commentId;
+	  const avatarUrl = comment.profilePictureUrl || `https://i.pravatar.cc/40?u=${comment.eventMemberId}`;
+	  const timeStr = comment.commentTime ? new Date(comment.commentTime).toLocaleString() : '';
+	  const memberLink = `<a href="/members/${comment.eventMemberId}/profile">${comment.memberName || '匿名'}</a>`;
+
+	  const box = $(`
+	    <div class="comment-box" data-id="${commentId}">
+	      <div class="comment-header">
+	        <a href="/members/${comment.eventMemberId}/profile">
+	          <img src="${avatarUrl}" class="profile-img">
+	        </a>
+	        <div style="flex-grow:1;">
+	          <div class="comment-meta">${memberLink}<span class="comment-time">${timeStr}</span></div>
+	          <div class="comment-message"></div>
+	          <button class="reply-btn">回覆</button>
+	        </div>
+	        ${isOwner ? `
+	          <button class="options-btn">⋯</button>
+	          <div class="tooltip-text">編輯或刪除此留言</div>
+	          <div class="dropdown position-absolute" style="top: 30px; right: 10px; display: none;">
+	            <ul class="dropdown-menu show" style="position:static;float:none;min-width:auto;">
+	              <li><a class="dropdown-item edit-btn" href="#">編輯</a></li>
+	              <li><a class="dropdown-item delete-btn" href="#">刪除</a></li>
+	            </ul>
+	          </div>
+	        ` : ''}
+	      </div>
+	    </div>
+	  `);
+
+	  box.find(".comment-message").text(comment.commentMessage);
+   	  //box.find(".comment-meta").html(`${comment.memberName || '匿名'}<span class="comment-time">${comment.commentTime ? new Date(comment.commentTime).toLocaleString() : ''}</span>`);
+
+
+
+    box.find(".options-btn").on("click", function () {
+      box.find(".tooltip-text").css("opacity", 0);
+      box.find(".dropdown").toggle();
+    });
+
+    box.find(".reply-btn").on("click", function () {
+      const input = $("#newCommentInput");
+      input.val(`@${memberName} `).focus();
+    });
+
+    box.find(".edit-btn").click(function (e) {
+      e.preventDefault();
+      const msgDiv = box.find(".comment-message");
+      const originalMsg = msgDiv.text();
+      const input = $(`<input type="text" class="edit-input" value="${originalMsg}" />`);
+      msgDiv.replaceWith(input);
+      input.focus();
+
+      input.on("keydown", function (e) {
+        if (e.key === "Enter") {
+          const newMsg = input.val().trim();
+          if (!newMsg) return;
+          $.ajax({
+            url: `/comments/${commentId}`,
+            method: "PUT",
+            contentType: "application/json",
+            data: JSON.stringify({
+              commentMessage: newMsg,
+              eventMember: { eventMemberId: currentMemberId }
+            }),
+            success: function () {
+              page = 0;
+              noMoreData = false;
+              loadComments();
+            }
+          });
+        } else if (e.key === "Escape") {
+          input.replaceWith(`<div class="comment-message">${originalMsg}</div>`);
+        }
+      });
+    });
+
+    box.find(".delete-btn").click(function (e) {
+      e.preventDefault();
+      if (confirm("確定要刪除此留言？")) {
+        $.ajax({
+          url: `/comments/${commentId}`,
+          method: "DELETE",
+          success: function () {
+            page = 0;
+            noMoreData = false;
+            loadComments();
+          }
+        });
+      }
+    });
+
+    if (returnBox) return box;
+    $("#commentsContainer").append(box);
+  }
+
+  // 新增留言
+  $("#newCommentInput").on("keydown", function (e) {
+    if (e.key === "Enter") {
+      const msg = $(this).val().trim();
+      if (!msg) return;
+      $.ajax({
+        url: "/comments",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify({
+          commentMessage: msg,
+          eventMember: { eventMemberId: currentMemberId }
+        }),
+        success: function (newComment) {
+          $("#newCommentInput").val('');
+          const box = renderComment(newComment, true);
+          $("#commentsContainer").append(box); // 把留言插入列表底部
+        }
+      });
+    }
+  });
+
+	//Infinite Scroll
+  $(window).on("scroll", function () {
+    if ($(window).scrollTop() + $(window).height() >= $(document).height() - 50) {
+      loadComments();
+    }
+  });
+
+  $(document).ready(loadComments);
+    </script>
+  
+        <!-- 網頁內容 End -->
+
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-light text-black-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+            <div class="container py-5">
+                <div class="row g-5">
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-black mb-4">
+                            <img class="img-fluid" src="images/img.bootstrap/LifeSpace3.png" alt="Icon"
+                                 style="width: 250px; height: 60px;">
+                        </h5>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <div class="d-flex pt-2">
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-youtube"></i></a>
+                            <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-black mb-4">Quick Links</h5>
+                        <a class="btn btn-link text-black-50" href="">About Us</a>
+                        <a class="btn btn-link text-black-50" href="">Contact Us</a>
+                        <a class="btn btn-link text-black-50" href="">Our Services</a>
+                        <a class="btn btn-link text-black-50" href="">Privacy Policy</a>
+                        <a class="btn btn-link text-black-50" href="">Terms & Condition</a>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-black mb-4">Photo Gallery</h5>
+                        <div class="row g-2 pt-2">
+                            <div class="col-4">
+                                <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-1.jpg" alt="">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-2.jpg" alt="">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-3.jpg" alt="">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-4.jpg" alt="">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-5.jpg" alt="">
+                            </div>
+                            <div class="col-4">
+                                <img class="img-fluid rounded bg-light p-1" src="images/img.bootstrap/property-6.jpg" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="text-black mb-4">Newsletter</h5>
+                        <p>Dolor amet sit justo amet elitr clita ipsum elitr est.</p>
+                        <div class="position-relative mx-auto" style="max-width: 400px;">
+                            <input class="form-control bg-transparent w-100 py-3 ps-4 pe-5" type="text"
+                                   placeholder="Your email">
+                            <button type="button"
+                                    class="btn btn-primary py-2 position-absolute top-0 end-0 mt-2 me-2">SignUp</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
+
+                            <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="">Home</a>
+                                <a href="">Cookies</a>
+                                <a href="">Help</a>
+                                <a href="">FQAs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+        <!-- Back to Top -->
+<!--         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a> -->
+
+<!--         <button class="btn btn-lg btn-primary btn-lg-square mic-button" onclick="micButtonClick()"> -->
+<!--             <i class="fa-solid fa-headphones fa-xl"></i> -->
+<!--         </button> -->
+<!--     </div> -->
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+  
+</body>
+</html>

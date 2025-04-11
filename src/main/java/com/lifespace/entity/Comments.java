@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lifespace.constant.CommentsCommentHide;
 
 import jakarta.persistence.Column;
@@ -48,6 +49,7 @@ public class Comments implements java.io.Serializable{
 //	@NotEmpty(message="留言內容: 請勿空白")
 	private String commentMessage;
 	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	@Column(name = "comment_time", insertable = false)
 	@UpdateTimestamp
 	private Timestamp commentTime;
