@@ -24,6 +24,7 @@ import com.lifespace.dto.EventMemberResponse;
 import com.lifespace.dto.EventRequest;
 import com.lifespace.dto.EventResponse;
 import com.lifespace.entity.Event;
+import com.lifespace.entity.EventCategory;
 import com.lifespace.entity.EventMember;
 import com.lifespace.entity.EventPhoto;
 import com.lifespace.entity.Member;
@@ -129,6 +130,12 @@ public class EventService {
         //因為是一筆訂單對應活動，該筆訂單(EventRequest是否要加入order_id?)也要加上新建的event_id
 	}
 
+	//獲取所有活動類別
+	public List<EventCategory> findAllEventsCategory() {
+		
+		return eventCategoryRepository.findAll();
+	}
+	
 	//更新活動狀態
 	@Transactional
 	public void updateEventStatus(String eventId, String status) {
@@ -302,6 +309,7 @@ public class EventService {
             Timestamp startTime,
             Timestamp endTime,
             String category,
+            String branch,
             Pageable pageable) {
         // 進行搜尋
         Page<EventResponse> eventPage = eventRepository.findEventsByConditions(
@@ -309,6 +317,7 @@ public class EventService {
         		startTime,
         		endTime,
         		category,
+        		branch,
                 pageable
         );
         

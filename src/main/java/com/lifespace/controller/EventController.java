@@ -24,6 +24,7 @@ import com.lifespace.dto.EventMemberResponse;
 import com.lifespace.dto.EventRequest;
 import com.lifespace.dto.EventResponse;
 import com.lifespace.entity.Event;
+import com.lifespace.entity.EventCategory;
 import com.lifespace.repository.EventRepository;
 import com.lifespace.service.EventPhotoService;
 import com.lifespace.service.EventService;
@@ -95,12 +96,21 @@ public class EventController {
         return event;
     }
     
+    //獲取所有活動類別
+    @GetMapping("/getAllCategories")
+    public ResponseEntity<List<EventCategory>> getAllCategories() {
+    	System.out.println("被要求檔案");
+    	List<EventCategory> categories = eventSvc.findAllEventsCategory();
+    	
+        return ResponseEntity.ok(categories);
+    }
  
     @GetMapping("/search/native")
     public ResponseEntity<Page<EventResponse>> searchEvents( @RequestParam(required = false) String eventName,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String branch,
             @RequestParam(defaultValue = "5") @Max(10) @Min(0) Integer size,
             @RequestParam(defaultValue = "0") @Min(0) Integer page) {
         // 創建分頁和排序條件
@@ -110,13 +120,14 @@ public class EventController {
         // 處理空字符串
         eventName = (eventName != null && eventName.trim().isEmpty()) ? null : eventName;
         category = (category != null && category.trim().isEmpty()) ? null : category;
+        branch = (branch != null && branch.trim().isEmpty()) ? null : branch;
         
         // 將LocalDateTime轉換為Timestamp
         Timestamp eventStartTime = startTime != null ? Timestamp.valueOf(startTime) : null;
         Timestamp eventEndTime = endTime != null ? Timestamp.valueOf(endTime) : null;
         // 呼叫服務層的搜尋方法
         Page<EventResponse> result = eventSvc.searchEvents(eventName, eventStartTime, eventEndTime, category,
-        pageable);
+        		branch, pageable);
         
         return ResponseEntity.ok(result);
     }

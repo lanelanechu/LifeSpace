@@ -58,23 +58,16 @@
   margin-right: 20px; /* 增加日期與下一個欄位的間距 */
 }
 
-/* 開始與結束時間選擇框變小，並且內文字置中 */
-#start-time {
-  flex: 0.5;
-  max-width: 80px;
-  text-align: center;
-  appearance: none;
-  background-color: white;
-  margin-right: 10px; /* 調整開始時間與前後元素的間距 */
-}
-
-#end-time {
-  flex: 0.5;
-  max-width: 80px;
-  text-align: center;
-  appearance: none;
-  background-color: white;
-  margin-right: 20px; /* 調整結束時間與下一個元素的間距 */
+/* 調整開始與結束時間選擇框 */
+#eventStartTime,
+#eventEndTime {
+    flex: 1;
+    max-width: 250px;  /* 增加寬度 */
+    min-width: 200px;  /* 設定最小寬度 */
+    text-align: center;
+    appearance: none;  /* 去除預設樣式 */
+    padding: 8px;      /* 增加內距 */
+    font-size: 14px;   /* 調整字體大小 */
 }
 
 /* 地點選擇框，內文字置中 */
@@ -303,4 +296,17 @@
     box-shadow: none; /* 移除 Bootstrap 預設的焦點陰影 */
 }
 
+
+
+/* 調整開始與結束時間選擇框 */
+#eventStartTime,
+#eventEndTime {
+    flex: 1;
+    max-width: 250px;  /* 增加寬度 */
+    min-width: 200px;  /* 設定最小寬度 */
+    text-align: center;
+    appearance: none;  /* 去除預設樣式 */
+    padding: 8px;      /* 增加內距 */
+    font-size: 14px;   /* 調整字體大小 */
+}
 

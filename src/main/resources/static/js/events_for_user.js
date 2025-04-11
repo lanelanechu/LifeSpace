@@ -339,14 +339,23 @@ $(document).ready(function () {
                                已成功取消舉辦活動，系統將通知所有報名者
                            </div>
                        `);
+					   
+					   // 更新活動卡片狀態和移除按鈕
+					   const eventCard = $(`.event-container[data-event-id="${cancelEventId}"]`);
+					             eventCard.find('.event-status')
+					                       .removeClass('status-scheduled') // 移除原有的狀態 class
+					                       .addClass('status-cancelled')     // 新增 "已取消" 的狀態 class
+					                       .text('已取消');                 // 更新文字
+					             eventCard.find('.cancel-button').remove(); // 移除取消按鈕 
+
                        
-                       // 重新加載活動數據
-                      setTimeout(function() {
-                           $('.alert').fadeOut(function() {
-                               $(this).remove();
-                               loadEventData();
-                         });
-                      }, 2000);
+						// 移除成功訊息 (延後2秒後移除)
+						setTimeout(function() {
+								   $('.alert').fadeOut(function() {
+								           $(this).remove();
+								    });
+						}, 2000);
+										 
                    },
                    error: function(xhr) {
                        $('.cancel-processing').remove();
@@ -441,40 +450,13 @@ $(document).ready(function () {
 		           }
 		       });
 		   });
-
-		   // 如果是取消舉辦活動，也需要類似的修改
-		   //$('#confirmCancelHostBtn').click(function() {
-		    //   if (!cancelEventId || !cancelOrganizerId) return;
-
-		       // 關閉彈窗
-		    //   $('#cancelHostEventModal').modal('hide');
-
-		       // 顯示全局 spinner
-		    //   showLoadingSpinner();
-
-		       // 發送取消舉辦請求
-		  //     $.ajax({
-		     //      url: 'http://localhost:8080/lifespace/event/cancell',
-		    //       method: 'GET',
-		    //       data: {
-		    //           organizerId: cancelOrganizerId,
-		    //           eventId: cancelEventId
-		    //       },
-		  //         success: function() {
-		               // 重新加載當前頁面的數據
-		 //              loadEventData();
-		 //          },
-		 //          error: function(xhr) {
-		               // 顯示錯誤訊息
-		  //             alert('取消舉辦失敗: ' + (xhr.responseText || '請稍後再試'));
-		  //     },
-		//           complete: function() {
-		               // 無論成功或失敗都隱藏 spinner
-		//               hideLoadingSpinner();
-		//           }
-		//       });
-
 		   
 		   
-		   
+		   //按下瀏覽可參加的活動後導向活動瀏覽頁面
+		   		   $('.btn.btn-outline-primary.mt-3').click(function() {
+							const events_url = 'http://localhost:8080/event_overview.html';
+		   		       		window.location.href = events_url;
+		   		       });
+		  
+		   	   
        });

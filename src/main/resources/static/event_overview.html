@@ -49,6 +49,15 @@
      
      <div class="container-xxl bg-white p-0">
 
+ <!-- Spinner Start -->
+        <div id="spinner"
+             class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+        
         <!-- Header Navbar Start -->
         <div class="container-fluid nav-bar bg-transparent">
             <nav class="navbar navbar-expand-lg bg-white navbar-light py-0 px-4">
@@ -120,29 +129,15 @@
                 <div class="col-md-6 col-lg-2">
                     <label for="location" class="form-label">地點</label>
                     <select id="location" class="form-select">
-                        <option value="">地點</option>
+                       <!-- <option value="">地點</option>
                         <option value="taipei">台北</option>
-                        <option value="taichung">台中</option>
+                        <option value="taichung">台中</option>  -->
                     </select>
                 </div>
                 <div class="col-md-6 col-lg-2">
     <label for="category" class="form-label">活動類別</label>
     <select id="category" class="form-select">
-        <option value="">所有類別</option>
-        <option value="EC001">團康</option>
-        <option value="EC002">工作坊</option>
-        <option value="EC003">讀書會</option>
-        <option value="EC004">演講</option>
-        <option value="EC005">聯誼</option>
-        <option value="EC006">小空間</option>
-        <option value="EC007">手做</option>
-        <option value="EC008">桌遊</option>
-        <option value="EC009">劇本殺</option>
-        <option value="EC010">畫展</option>
-        <option value="EC011">攝影</option>
-        <option value="EC012">影片欣賞</option>
-        <option value="EC013">生日派對</option>
-        <option value="EC014">其他</option>
+    	<!-- fetch 活動類別API  -->
     </select>
 </div>
                 <div class="col-md-12 mt-3 d-flex justify-content-center">
@@ -157,26 +152,14 @@
 
 
     <!--  標籤輪播 -->
-    <div class="tag-wrapper">
-        <button class="tag-btn left-tag-btn">&lt;</button>
-        <div class="tag-container">
-            <div class="tag">團康</div>
-            <div class="tag">工作坊</div>
-            <div class="tag">讀書會</div>
-            <div class="tag">演講</div>
-            <div class="tag">聯誼</div>
-            <div class="tag">小空間</div>
-            <div class="tag">手做</div>
-            <div class="tag">桌遊</div>
-            <div class="tag">劇本殺</div>
-            <div class="tag">畫展</div>
-            <div class="tag">攝影</div>
-            <div class="tag">影片欣賞</div>
-            <div class="tag">生日派對</div>
-            <div class="tag">其他</div>
-        </div>
-        <button class="tag-btn right-tag-btn">&gt;</button>
-    </div>
+	<div class="tag-wrapper">
+    	<button class="tag-btn left-tag-btn">&lt;</button>
+    	<div class="tag-container">
+        <!-- fetch類別API -->
+    	</div>
+    	<button class="tag-btn right-tag-btn">&gt;</button>
+	</div>
+
 
     <!-- 熱門推薦 -->
     <div class="slide-outer">
@@ -310,6 +293,13 @@
 
         // 當文檔加載完成時執行
         document.addEventListener('DOMContentLoaded', function () {
+
+        	//獲取所有活動類別
+        	fetchAllEventsCategory();
+        	
+        	//獲取所有活動地點
+        	fetchAllBranches();
+        	
             // 獲取所有活動
             fetchAllEvents();
 
@@ -323,8 +313,138 @@
                 clearSearchForm();
                 resetToPopularEvents();
             });
+                        
         });
 
+     	// 獲取所有活動類別
+        async function fetchAllEventsCategory() {
+            // 使用API端點路徑
+            const apiUrl = 'http://localhost:8080/lifespace/event/getAllCategories';
+
+            console.log('正在嘗試獲取活動類別數據，API 路徑:', apiUrl);
+
+            fetch(apiUrl)
+                .then(response => {
+                    console.log('API 響應狀態:', response.status);
+                    if (!response.ok) {
+                        throw new Error('網路回應不正常，狀態碼: ' + response.status);
+                    }
+                    console.log(response);
+                    return response.json();
+                    console.log(response);
+                })
+                .then(categories => {
+                    // 顯示活動類別在條件搜尋區域
+                	displayCategories(categories);
+                	displayCategoriesOwl(categories);
+                })
+                .catch(error => {
+                    console.error('獲取活動類別時出錯:', error);
+
+                });
+        }
+
+        function displayCategories(categories){
+        	// 獲取活動類別下拉選單
+            const categorySelect = document.getElementById('category');
+            
+            // 先清空原有的選項（除了預設選項）
+            categorySelect.innerHTML = '<option value="">所有類別</option>';
+       
+            // 為每個類別添加 option
+            categories.forEach(category => {
+            	const newCategory = `<option value=${category.eventCategoryId}>${category.eventCategoryName}</option>`;
+            	categorySelect.innerHTML = categorySelect.innerHTML  + newCategory;  
+            });   
+        }
+        
+        
+        function displayCategoriesOwl(categories){
+
+        	// 獲取類別容器
+            const tagContainer = document.querySelector('.tag-container');
+            
+            // 清空原有內容
+            tagContainer.innerHTML = '';
+            
+            // 動態添加類別標籤
+            categories.forEach(category => {
+                const tagDiv = document.createElement('div');
+                tagDiv.className = 'tag';
+                tagDiv.textContent = category.eventCategoryName;
+                
+                // 可以添加點擊事件，點擊後自動篩選該類別
+                tagDiv.addEventListener('click', () => {
+                    // 設定類別下拉選單的值
+                    document.getElementById('category').value = category.eventCategoryId;
+                    // 觸發搜尋
+                    fetchEventsByConditions();
+                });
+                
+                tagContainer.appendChild(tagDiv);
+            });	
+            
+            // 所有標籤添加完成後，初始化輪播功能
+            initializeTagCarousel();
+        }
+        
+     // 初始化標籤輪播功能
+        function initializeTagCarousel() {
+            const tagContainer = $(".tag-container");
+            
+            // 確保有標籤元素存在
+            if ($(".tag").length > 0) {
+                const tagWidth = $(".tag").outerWidth(true);
+                
+                // 先解除現有的事件綁定，再重新綁定，避免重複綁定
+                $(".left-tag-btn").off('click').on('click', function() {
+                    tagContainer.animate({ scrollLeft: "-=" + tagWidth * 1.5 }, 100);
+                });
+                
+                $(".right-tag-btn").off('click').on('click', function() {
+                    tagContainer.animate({ scrollLeft: "+=" + tagWidth * 1.5 }, 100);
+                });
+                
+                console.log("標籤輪播功能已初始化，標籤寬度：", tagWidth);
+            } else {
+                console.warn("沒有找到標籤元素，輪播功能未初始化");
+            }
+        }
+     
+     	// 獲取所有地點
+        async function fetchAllBranches() {
+    	 
+        	// 使用API端點路徑
+            const apiUrl = 'http://localhost:8080/branch/getAll';
+
+            fetch(apiUrl)
+                .then(response => {
+                    console.log('API 響應狀態:', response.status);
+                    if (!response.ok) {
+                        throw new Error('網路回應不正常，狀態碼: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(branches => {
+                    // 顯示活動類別在條件搜尋區域
+                	displayBranches(branches);
+                })
+                .catch(error => {
+                    console.error('獲取活動地點時出錯:', error);
+                });	
+     }
+     
+        function displayBranches(branches){
+
+            const branchSelect = document.getElementById('location');
+            branchSelect.innerHTML = '<option value="">所有地點</option>';
+            branches.forEach(branch => {
+            	const newBranch = `<option value=${branch.branchId}>${branch.branchName}</option>`;
+            	branchSelect.innerHTML = branchSelect.innerHTML  + newBranch;  
+            });   
+        }
+        
+        
         // 清除搜尋表單
         function clearSearchForm() {
             document.getElementById('search').value = '';
@@ -382,7 +502,7 @@
             const searchValue = document.getElementById('search').value || "";
             const startTime = document.getElementById('eventStartTime').value || "";
             const endTime = document.getElementById('eventEndTime').value || "";
-            const location = document.getElementById('location').value || "";
+            const branch = document.getElementById('location').value || "";
 			const category = document.getElementById('category').value || ""; 
 
             // 檢查是否有任何搜尋條件
@@ -395,7 +515,7 @@
                 eventName: searchValue,
                 startTime: startTime,
                 endTime: endTime,
-                location: location,
+                branch: branch,
                 category: category,
             }).toString();
 

@@ -36,6 +36,7 @@ public interface EventRepository extends JpaRepository<Event,String>{
 		    "AND (:startTime IS NULL OR e.event_start_time >= :startTime) " +
 		    "AND (:endTime IS NULL OR e.event_end_time <= :endTime) " +
 		    "AND (:category IS NULL OR ec.event_category_id = :category) "+
+		    "AND (:branch IS NULL OR br.branch_id = :branch) "+
 		    "GROUP BY e.event_id, br.branch_addr, ord.member_id, br.latitude, br.longitude",
 		    countQuery = "SELECT " +
 				    "e.event_id, e.event_name, e.event_start_time, e.event_end_time, " +
@@ -52,6 +53,7 @@ public interface EventRepository extends JpaRepository<Event,String>{
 				    "AND (:startTime IS NULL OR e.event_start_time >= :startTime) " +
 				    "AND (:endTime IS NULL OR e.event_end_time <= :endTime) " +
 				    "AND (:category IS NULL OR ec.event_category_id = :category) "+
+				    "AND (:branch IS NULL OR br.branch_id = :branch) "+
 				    "GROUP BY e.event_id, br.branch_addr, ord.member_id, br.latitude, br.longitude",
 		    nativeQuery = true)
 	    Page<EventResponse> findEventsByConditions(
@@ -59,6 +61,7 @@ public interface EventRepository extends JpaRepository<Event,String>{
 	            @Param("startTime") Timestamp startTime,
 	            @Param("endTime") Timestamp endTime,
 	            @Param("category") String category,
+	            @Param("branch") String branch,
 	            Pageable pageable);
 	 
 	 
