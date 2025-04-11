@@ -155,6 +155,8 @@ function setActive(element, id) {
     updateTotal();
 }
 
+
+
 // ================ 日期選擇顯示/隱藏 ================
 const dateToggleButton = document.getElementById('dateToggleButton');
 const calendarContainer = document.getElementById('calendarContainer');
@@ -168,8 +170,13 @@ const nextMonthButton = document.getElementById('nextMonth');
 let currentDate = new Date();
 let isCalendarVisible = false;
 
-dateToggleButton.addEventListener('click', function () {
+// 計算最大可選日期（當前日期起3個月內）
+const now = new Date();
+const maxDate = new Date();
+maxDate.setMonth(now.getMonth() + 3);
+maxDate.setDate(now.getDate()); // 設為3個月後的同一個date
 
+dateToggleButton.addEventListener('click', function () {
     if (isCalendarVisible) {
         // 隱藏日曆
         calendarContainer.classList.add('fade-out');
@@ -201,6 +208,9 @@ function renderCalendar(year, month) {
     const firstDay = new Date(year, month, 1);
     const lastDay = new Date(year, month + 1, 0);
 
+    // 獲取當前的日期和時間
+    const now = new Date();
+
     // 前一個月的填充日期
     const startDay = firstDay.getDay();
     for (let i = 0; i < startDay; i++) {
@@ -215,45 +225,99 @@ function renderCalendar(year, month) {
         dayElement.classList.add('calendar-day');
         dayElement.textContent = i;
 
-        // 標記今天
-        const today = new Date();
-        if (today.getDate() === i &&
-            today.getMonth() === month &&
-            today.getFullYear() === year) {
-            dayElement.classList.add('current-day');
-        }
+        // 檢查這一天是否在過去
+        const checkDate = new Date(year, month, i);
+        const isPastDate = checkDate < new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const isFutureDate = checkDate > maxDate;  // 檢查是否超過3個月
 
-        // 點擊事件
-        dayElement.addEventListener('click', function () {
-            const selectedDate = new Date(year, month, i);
-            dateToggleButton.innerHTML = selectedDate.toLocaleDateString('zh-TW') + `
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
-                                    </svg>`;
-            calendarContainer.classList.add('fade-out');
-            setTimeout(() => {
-                calendarContainer.style.display = 'none';
-                calendarContainer.classList.remove('fade-out');
-            }, 450);
-            isCalendarVisible = !isCalendarVisible;
-        });
+        if (isPastDate || isFutureDate) {
+            // 過去的日期設為禁用狀態
+            dayElement.classList.add('disabled-day');
+        } else {
+            // 標記今天
+            if (now.getDate() === i && now.getMonth() === month && now.getFullYear() === year) {
+                dayElement.classList.add('current-day');
+            }
+
+            // 點擊事件（只有未來日期才能點擊）
+            dayElement.addEventListener('click', function () {
+                const selectedDate = new Date(year, month, i);
+
+                // 儲存選中的日期，供時間選擇使用
+                window.selectedDate = selectedDate;
+
+                dateToggleButton.innerHTML = selectedDate.toLocaleDateString('zh-TW') + `
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>`;
+                calendarContainer.classList.add('fade-out');
+                setTimeout(() => {
+                    calendarContainer.style.display = 'none';
+                    calendarContainer.classList.remove('fade-out');
+                }, 450);
+                isCalendarVisible = !isCalendarVisible;
+
+                // 當選擇了新日期，重置時間選擇
+                resetTimeSelections();
+            });
+        }
 
         calendarDays.appendChild(dayElement);
     }
 }
 
+// 重置時間選擇
+function resetTimeSelections() {
+    // 重置開始時間按鈕文字
+    const startButton = document.getElementById('startTimeButton');
+    startButton.innerHTML = '開始時間 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+    // 重置結束時間按鈕文字
+    const endButton = document.getElementById('endTimeButton');
+    endButton.innerHTML = '結束時間 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+    // 清空時間容器
+    document.getElementById('startTimeContainer').innerHTML = '';
+    document.getElementById('endTimeContainer').innerHTML = '';
+
+    // 清空隱藏的輸入欄位
+    document.getElementById('startTimeInput').value = '';
+    document.getElementById('endTimeInput').value = '';
+
+    // 重置全域變數
+    selectedStartTime = null;
+}
+
 // 上個月按鈕
 prevMonthButton.addEventListener('click', function () {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    const now = new Date();
+    const previousMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1);
+
+    // 只有當上個月不早於當前月份時，才允許導航到上個月
+    if (previousMonth.getFullYear() > now.getFullYear() ||
+        (previousMonth.getFullYear() === now.getFullYear() &&
+            previousMonth.getMonth() >= now.getMonth())) {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    }
 });
 
 // 下個月按鈕
 nextMonthButton.addEventListener('click', function () {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    // 檢查下個月是否超出3個月的限制
+    const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1);
+    const threeMonthsLater = new Date();
+    threeMonthsLater.setMonth(now.getMonth() + 3);
+
+    // 只有在下個月不超過限制的情況下才允許切換
+    if (nextMonth.getFullYear() < threeMonthsLater.getFullYear() ||
+        (nextMonth.getFullYear() === threeMonthsLater.getFullYear() &&
+            nextMonth.getMonth() <= threeMonthsLater.getMonth())) {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    }
 });
 
 // ============開始、結束時間清單選擇============
@@ -322,36 +386,50 @@ function toggleTimeSelect(type) {
 
 let selectedStartTime = null;
 
+// 設定開始時間清單項目
 function generateStartTimeOptions(containerId, buttonId, inputId, minTime) {
     const container = document.getElementById(containerId);
     let html = '<ul class="time-list">';
-    // 若有設定最小時間，轉換成分鐘數
-    let minTimeMinutes = 0;
-    if (minTime) {
-        const parts = minTime.split(':');
-        minTimeMinutes = parseInt(parts[0]) * 60 + parseInt(parts[1]);
-    }
 
-    // 顯示出8:00~22:00的開始時間選擇清單
+    // 檢查選中的日期是否為今天
+    const now = new Date();
+    const isToday = window.selectedDate &&
+        window.selectedDate.getDate() === now.getDate() &&
+        window.selectedDate.getMonth() === now.getMonth() &&
+        window.selectedDate.getFullYear() === now.getFullYear();
+
+    // 獲取當前小時和分鐘
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    // 顯示出8:00~21:30的開始時間選擇清單
     for (let hour = 8; hour <= 21; hour++) {
         for (let minute = 0; minute < 60; minute += 30) {
-
-            // // 若提供最小時間，僅顯示大於該時間的選項
-            // let currentTimeMinutes = hour * 60 + minute;
-            // if (minTime && currentTimeMinutes <= minTimeMinutes) {
-            //     continue;
-            // }
-
             // 補 0 成兩位數字
             const hh = hour.toString().padStart(2, '0');
             const mm = minute.toString().padStart(2, '0');
             const timeStr = `${hh}:${mm}`;
 
-            // 點擊 li 時，呼叫 selectTime()，將時間帶入
-            html += `
-                <li onclick="selectTime('${containerId}', '${buttonId}', '${inputId}', '${timeStr}')">
-                    ${timeStr}
-                </li>`;
+            // 如果是今天，只顯示當前時間之後的選項
+            let isDisabled = false;
+            if (isToday) {
+                if (hour < currentHour || (hour === currentHour && minute <= currentMinute)) {
+                    isDisabled = true;
+                }
+            }
+
+            // 增加 disabled 類別到不可選的時間
+            if (isDisabled) {
+                html += `
+                    <li class="disabled-time">
+                        ${timeStr}
+                    </li>`;
+            } else {
+                html += `
+                    <li onclick="selectTime('${containerId}', '${buttonId}', '${inputId}', '${timeStr}')">
+                        ${timeStr}
+                    </li>`;
+            }
         }
     }
 
@@ -359,6 +437,7 @@ function generateStartTimeOptions(containerId, buttonId, inputId, minTime) {
     container.innerHTML = html;
 }
 
+// 設定結束時間清單項目
 function generateTimeOptions(containerId, buttonId, inputId, minTime) {
     const container = document.getElementById(containerId);
     let html = '<ul class="time-list">';
@@ -432,6 +511,7 @@ function selectTime(containerId, buttonId, inputId, time) {
         const endButton = document.getElementById('endTimeButton');
         endButton.innerHTML = '結束時間 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
         document.getElementById('endTimeContainer').innerHTML = '';
+        document.getElementById('endTimeInput').value = '';
     }
 
     // 呼叫計算函式
@@ -441,8 +521,17 @@ function selectTime(containerId, buttonId, inputId, time) {
 // ============租賃品項數量選擇============
 function changeQuantity(id, change) {
     const input = document.getElementById(id);
-    let value = parseInt(input.value) + change;
-    if (value < 0) value = 0;
+    const maxQuantity = parseInt(input.getAttribute('data-max'));
+    let currentValue = parseInt(input.value) || 0;
+
+    let value = currentValue + change;
+    if (value < 0) {
+        value = 0;
+    } else if (value > maxQuantity) {
+        alert(`抱歉，目前該品項最多只能租借${maxQuantity}個`);
+        value = maxQuantity;
+    }
+
     input.value = value;
     updateTotal();
 }
@@ -477,7 +566,6 @@ function updateTotal() {
             if (diffMin > 0) {
                 durationHours = diffMin / 60; // 轉回小時
             }
-            console.log(startTimeStr, endTimeStr, durationHours);
         }
 
         // 將「使用時間」顯示在網頁上
@@ -721,7 +809,10 @@ function insertRentalItems(itemObj) {
                         <div class="equipment-name">${item.rentalItemName} (+$${item.rentalItemPrice})</div>
                         <div class="quantity-control">
                             <button class="quantity-btn" onclick="changeQuantity('${item.rentalItemId}', -1)">-</button>
-                            <input type="number" id="${item.rentalItemId}" class="quantity-input" value="0" min="0" data-price="${item.rentalItemPrice}" onchange="updateTotal()">
+                            <input type="number" id="${item.rentalItemId}" class="quantity-input" value="0" 
+                            min="0" max="${item.availableRentalQuantity}"
+                            data-price="${item.rentalItemPrice}" data-max="${item.availableRentalQuantity}" 
+                            onchange="updateTotal(this)" oninput="validateQuantity(this)">
                             <button class="quantity-btn" onclick="changeQuantity('${item.rentalItemId}', 1)">+</button>
                         </div>
                     </div>
@@ -730,6 +821,26 @@ function insertRentalItems(itemObj) {
     })
 }
 
+// 驗證目前輸入的數量不得超過可租借數量
+function validateQuantity(input) {
+    const maxQuantity = parseInt(input.getAttribute('data-max'));   // 取得可租借數量
+    let value = parseInt(input.value) || 0;
+
+    if (value < 0) {
+        value = 0;
+    }
+
+    // 确保值不超过最大可租借数量
+    if (value > maxQuantity) {
+        alert(`抱歉，目前該品項最多只能租借${maxQuantity}個`);
+        value = maxQuantity;
+    }
+
+    // 更新输入框的值
+    input.value = value;
+
+    updateTotal();
+}
 
 // 載入空間評價資訊
 function fetchComments() {
@@ -1117,8 +1228,6 @@ document.querySelector('.payment-btn').addEventListener("click", function() {
         eventDTO: null,     // 活動要在付款之後才放上去 (利用修改的方式)
         rentalItemDetailsDTOList: rentalItemList
     };
-
-    console.log(ordersDTO);
 
     fetch("/orders", {
         method: "POST",

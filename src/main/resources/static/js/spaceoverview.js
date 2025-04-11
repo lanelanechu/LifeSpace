@@ -60,11 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 初始化距離滑桿
     noUiSlider.create(distanceRange, {
-        start: [100, 10000],
+        start: [0, 10000],
         connect: true,
         step: 100,
         range: {
-            min: 100,
+            min: 0,
             max: 10000
         },
         format: {
@@ -89,6 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchSpaces();
     fetchSpaceUsages();
     setupEventListeners();
+
+    // 取得目前位置
+    setTimeout(getUserLocation, 500);
 });
 
 // 開始抓後端的資料
@@ -107,10 +110,19 @@ function fetchSpaces() {
                 status: space.spaceStatus,
                 usage: space.spaceUsageMaps.map(map => map.spaceUsage.spaceUsageName),
                 photo: space.spacePhotos.map(map => map.photo),
-                coordinates: [space.latitude, space.longitude] // 模擬座標，之後會利用google maps API抓出
+                coordinates: [space.latitude, space.longitude], // 模擬座標，之後會利用google maps API抓出
+                distance: null
             }));
             renderSpaces(spaces);
-            if (map) { // Only update markers if map is initialized
+
+            // 如果已經獲取到用戶位置，則更新距離
+            if (userLocation) {
+                updateSpacesDistance();
+            } else {
+                renderSpaces(spaces);
+            }
+
+            if (map) {  // 地圖初始化後，更新座標
                 updateMapMarkers(spaces);
             }
         })
@@ -131,6 +143,14 @@ function renderSpaces(spacesToRender) {
         const spaceCard = document.createElement('div');
         spaceCard.className = 'space-card';
         spaceCard.dataset.id = space.spaceId;
+
+
+        // 處理目前的距離
+        let distanceText = '';
+        if (space.distance != null) {
+            distanceText = space.distance < 1000 ? `${space.distance}m` : `${(space.distance / 1000).toFixed(1)}km`;
+        }
+
         spaceCard.innerHTML = `
             <div class="space-image">    
                 <img src="${getFirstPhoto(space.photo)}" alt="空間圖片">
@@ -144,7 +164,7 @@ function renderSpaces(spacesToRender) {
                 </div>
                 <div class="space-location">
                     <div class="location-text">
-                        <i class="fas fa-map-marker-alt"></i> ${space.location}
+                        <i class="fas fa-map-marker-alt"></i> ${distanceText}
                     </div>
                     <div class="people-count">
                         <i class="fas fa-user"></i> ${space.capacity}
@@ -236,27 +256,189 @@ function renderUsages(usages) {
 }
 
 // ============= 地圖相關 =============
+let userLocation = null;
+let locationRequestInProgress = false;
+let locationRetries = 0;
+const MAX_LOCATION_RETRIES = 3;
+const LOCATION_CACHE_KEY = 'user_location_cache';
+const LOCATION_CACHE_EXPIRY = 30 * 60 * 1000; // 30分鐘，單位為毫秒
+
+// 抓快取中的地點
+function getCachedLocation() {
+    const cachedLocationData = localStorage.getItem(LOCATION_CACHE_KEY);
+    if (!cachedLocationData) return null;
+
+    try {
+        const { location, timestamp } = JSON.parse(cachedLocationData);
+        // 檢查緩存是否過期
+        if (Date.now() - timestamp < LOCATION_CACHE_EXPIRY) {
+            return location;
+        }
+    } catch (error) {
+        console.warn('無法解析緩存的位置數據:', error);
+    }
+
+    // 緩存過期或無效，清除它
+    localStorage.removeItem(LOCATION_CACHE_KEY);
+    return null;
+}
+
+function cacheLocation(location) {
+    const locationData = {
+        location: location,
+        timestamp: Date.now()
+    };
+    localStorage.setItem(LOCATION_CACHE_KEY, JSON.stringify(locationData));
+}
+
+function getUserLocation() {
+    // 如果已經有位置數據或正在獲取中，直接返回
+    if (userLocation || locationRequestInProgress) {
+        return;
+    }
+
+    locationRequestInProgress = true;
+
+    // 首先嘗試使用cache內存過的位置
+    const cachedLocation = getCachedLocation();
+    if (cachedLocation) {
+        userLocation = cachedLocation;
+        updateSpacesDistance();
+        updateMapIfInitialized();
+        locationRequestInProgress = false;
+        return;
+    }
+
+    // 如果cache無效，使用瀏覽器的定位API
+    if (navigator.geolocation) {
+        const geoOptions = {
+            enableHighAccuracy: true,
+            timeout: 15000,       // 增加超時時間
+            maximumAge: 300000    // cache保持5分鐘
+        };
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                locationRequestInProgress = false;
+                locationRetries = 0;
+
+                userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                // 緩存位置數據
+                cacheLocation(userLocation);
+
+                // 更新距離和地圖
+                updateSpacesDistance();
+                updateMapIfInitialized();
+            },
+            (error) => {
+                locationRequestInProgress = false;
+
+                console.warn(`定位失敗 (${locationRetries + 1}/${MAX_LOCATION_RETRIES}): ${error.message}`);
+
+                // 如果還有重試次數，則重試
+                if (locationRetries < MAX_LOCATION_RETRIES) {
+                    locationRetries++;
+                    setTimeout(getUserLocation, 1000); // 1秒後重試
+                } else {
+                    console.error(`達到最大重試次數 (${MAX_LOCATION_RETRIES})，無法獲取位置`);
+                    // 使用默認位置（例如台北市中心）
+                    userLocation = { lat: 25.0497, lng: 121.5380 };
+                    renderSpaces(spaces);
+                }
+            },
+            geoOptions
+        );
+    } else {
+        console.warn("瀏覽器不支援地理定位");
+        locationRequestInProgress = false;
+        renderSpaces(spaces);
+    }
+}
+
+function updateMapIfInitialized() {
+    if (map && userLocation) {
+        map.setCenter(userLocation);
+    }
+}
+
+function updateSpacesDistance() {
+    if (!userLocation) return;
+
+    spaces.forEach(space => {
+        try {
+            if (isValidCoordinates(space.coordinates)) {
+                space.distance = calculateDistance(
+                    userLocation.lat,
+                    userLocation.lng,
+                    parseFloat(space.coordinates[0]),
+                    parseFloat(space.coordinates[1])
+                );
+            } else {
+                space.distance = null;
+                console.warn(`空間 ${space.spaceId} 座標無效:`, space.coordinates);
+            }
+        } catch (error) {
+            space.distance = null;
+            console.error(`計算空間 ${space.spaceId} 距離時出錯:`, error);
+        }
+    });
+
+    // 更新完距離後重新渲染空間列表
+    renderSpaces(spaces);
+    applyFilters();
+}
+
 function initMap() {
-    console.log("Google Maps API Loaded - initMap called");
+    if (map)
+        return;
+
+    // 載入地圖
     try {
         const Map = google.maps.Map;   // 導入Google Maps
 
         map = new Map(document.getElementById("map"), {
-            center: { lat: 25.0497, lng: 121.5380 },   // 預設以台北市為中心
+            center: { lat: 25.0497, lng: 121.5380 },   // 預設以台北市為中心，下面定位時才會改
             zoom: 13,
             mapId: "37060db895f0c169",
             disableDefaultUI: true,
             zoomControl: true
         });
 
+        // 如果成功定位，則設置地圖到中心
+        if (userLocation) {
+            map.setCenter(userLocation);
+        }
+
+        // 更新地圖標記
         if (spaces && spaces.length > 0) {
             updateMapMarkers(spaces);
         }
+
 
     } catch (error) {
         console.error("Error initializing Google Map:", error);
         alert("無法載入地圖，請稍後再試。");
     }
+}
+
+function calculateDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371e3; // 地球半徑（公尺）
+    const a1 = lat1 * Math.PI / 180;
+    const a2 = lat2 * Math.PI / 180;
+    const da = (lat2 - lat1) * Math.PI / 180;
+    const dl = (lon2 - lon1) * Math.PI / 180;
+
+    const a = Math.sin(da / 2) * Math.sin(da / 2) +
+        Math.cos(a1) * Math.cos(a2) *
+        Math.sin(dl / 2) * Math.sin(dl / 2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    return Math.round(R * c); // 單位：公尺
 }
 
 
@@ -432,7 +614,7 @@ function setupEventListeners() {
             if (parentClass.includes('price-range')) {
                 priceRange.noUiSlider.set([100, 2000]);
             } else if (parentClass.includes('distance-range')) {
-                distanceRange.noUiSlider.set([100, 10000]);
+                distanceRange.noUiSlider.set([0, 10000]);
             }
             applyFilters();
         });
@@ -444,9 +626,17 @@ function setupEventListeners() {
 // ========== 執行篩選 ==========
 function applyFilters() {
     const filteredSpaces = spaces.filter(space => {
+        // 篩選價格
         if (space.price < filters.minPrice || space.price > filters.maxPrice) return false;
 
-        // if (space.distance < filters.minDistance || space.distance > filters.maxDistance) return false;
+        // 篩選距離
+        if (userLocation && space.distance != null) {
+            // 檢查距離是否在指定範圍內
+            if (space.distance < filters.minDistance || space.distance > filters.maxDistance) {
+                return false;
+            }
+        }
+
 
         if (filters.peopleCount.length > 0) {
             let passes = false;
@@ -514,25 +704,33 @@ document.querySelector(".search-button").addEventListener("click", function(e) {
                 status: space.spaceStatus,
                 usage: space.spaceUsageMaps.map(map => map.spaceUsage.spaceUsageName),
                 photo: space.spacePhotos.map(map => map.photo),
-                coordinates: [space.latitude, space.longitude]
+                coordinates: [space.latitude, space.longitude],
+                distance: null
             }));
 
             // 重設所有篩選條件
             document.querySelectorAll(".reset-button").forEach(button => {
                 button.click();
             });
-            document.querySelectorAll('input[type="checkbox"][name="people"]').forEach(checkbox => {
-                checkbox.checked = false;
-            });
-            document.querySelectorAll('input[type="checkbox"][name="usage"]').forEach(checkbox => {
-                checkbox.checked = false;
-            });
+            // document.querySelectorAll('input[type="checkbox"][name="people"]').forEach(checkbox => {
+            //     checkbox.checked = false;
+            // });
+            // document.querySelectorAll('input[type="checkbox"][name="usage"]').forEach(checkbox => {
+            //     checkbox.checked = false;
+            // });
 
-            // 渲染搜尋結果
-            renderSpaces(searchedSpaces);
-            if (map) { // Only update markers if map is initialized
-                updateMapMarkers(searchedSpaces);
+            spaces = searchedSpaces;
+
+            if (userLocation) {
+                updateSpacesDistance();
+            } else {
+                renderSpaces(spaces);
             }
+
+            if (map) {
+                updateMapMarkers(spaces);
+            }
+
         })
         .catch(error => {
             alert(error.message);
@@ -545,6 +743,3 @@ document.querySelector(".search-input").addEventListener("keydown", function (e)
         document.querySelector(".search-button").click();
     }
 });
-
-
-

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -199,7 +200,7 @@ public class OrdersService {
         order.setAccountsPayable(ordersDTO.getAccountsPayable());
         order.setPaymentDatetime(ordersDTO.getPaymentDatetime());
 
-        // 建立分點的關聯，讓Mapper取得Branch
+        // 建立Branch與Member的關聯，讓Mapper取得
         Branch branch = new Branch();
         branch.setBranchId(ordersDTO.getBranchId());
         order.setBranch(branch);
@@ -210,26 +211,54 @@ public class OrdersService {
 
         // 若有加購項目
         List<RentalItemDetailsDTO> rentalItemList = ordersDTO.getRentalItemDetailsDTOList();
+
         if (rentalItemList != null && !rentalItemList.isEmpty()) {
-            List<RentalItemDetails> rentalItems = rentalItemList.stream().map(dto -> {
+//            List<RentalItemDetails> rentalItems = rentalItemList.stream().map(dto -> {
+//                RentalItem rentalItem = rentalItemRepository.findById(dto.getRentalItemId())
+//                        .orElseThrow(() -> new RuntimeException("找不到租借品項"));
+//
+//                RentalItemDetails item = new RentalItemDetails();
+//                item.setRentalItem(rentalItem);
+//                item.setRentalItemQuantity(dto.getRentalItemQuantity());
+//
+//                item.setCreatedTime(new Timestamp(System.currentTimeMillis()));
+//                item.setOrders(order); // 關聯訂單
+//                return item;
+//            }).collect(Collectors.toList());
+//
+//
+//            order.setRentalItemDetails(rentalItems);
+            List<RentalItemDetails> rentalItems = new ArrayList<>();
+
+            for (RentalItemDetailsDTO dto : ordersDTO.getRentalItemDetailsDTOList()) {
+                // 先檢查租借品項是否可用
                 RentalItem rentalItem = rentalItemRepository.findById(dto.getRentalItemId())
                         .orElseThrow(() -> new RuntimeException("找不到租借品項"));
 
+                if (rentalItem.getAvailableRentalQuantity() < dto.getRentalItemQuantity()) {
+                    throw new IllegalArgumentException("可租借數量不足：" + rentalItem.getRentalItemName());
+                }
+
+                // 更新剩餘可租借數量
+                rentalItem.setAvailableRentalQuantity(rentalItem.getAvailableRentalQuantity() - dto.getRentalItemQuantity());
+                rentalItemRepository.save(rentalItem);
+
+                // 建立關聯
                 RentalItemDetails item = new RentalItemDetails();
                 item.setRentalItem(rentalItem);
                 item.setRentalItemQuantity(dto.getRentalItemQuantity());
 
                 item.setCreatedTime(new Timestamp(System.currentTimeMillis()));
                 item.setOrders(order); // 關聯訂單
-                return item;
-            }).collect(Collectors.toList());
-
+                rentalItems.add(item);
+            }
 
             order.setRentalItemDetails(rentalItems);
-        }
 
+        }
         ordersRepository.save(order);
         return OrdersMapper.toOrdersDTO(order);
+
     }
 
 }

@@ -308,7 +308,7 @@ aside.aside {
 }
 
 .quantity-input {
-    width: 40px;
+    width: 60px;
     height: 30px;
     border: 1px solid #ccc;
     text-align: center;
@@ -692,6 +692,12 @@ aside.aside {
     }
 }
 
+.disabled-day {
+    color: #ccc;
+    pointer-events: none;
+    cursor: default;
+}
+
 /* --------------- 上面都是日曆 --------------- */
 
 /* --------------- 下面都是時間清單 --------------- */
@@ -736,6 +742,12 @@ aside.aside {
 /* 滑鼠移過去的效果 */
 .time-list li:hover {
     background-color: #f2f2f2;
+}
+
+.disabled-time {
+    color: #ccc;
+    pointer-events: none;
+    cursor: default;
 }
 
 /* --------------- 上面都是時間清單 --------------- */
